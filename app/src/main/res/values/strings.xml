@@ -15,7 +15,7 @@
     <string name="equal">=</string>
 
     <!-- Action buttons -->
-    <string name="multiply">x</string>
+    <string name="multiply">*</string>
     <string name="subtract">-</string>
     <string name="add">+</string>
     <string name="divide">/</string>
