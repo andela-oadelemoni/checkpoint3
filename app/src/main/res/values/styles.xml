@@ -7,11 +7,57 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!-- General button styles -->
+    <style name="common_button_style">
+        <!--<item name="android:height">65dp</item>-->
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:onClick">buttonClickAction</item>
+    </style>
+
+    <!-- Plain number grid styles -->
+    <style name="plain_numbers" parent="common_button_style">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/WhiteSmoke</item>
+        <item name="android:background">@drawable/number_button</item>
+        <item name="android:layout_margin">1dp</item>
+        <item name="android:padding">2dp</item>
+    </style>
+
+    <!-- Action Buttons -->
+    <style name="action_buttons" parent="plain_numbers">
+        <item name="android:background">@drawable/action_button</item>
+    </style>
+
+    <!-- Equal Button -->
+    <style name="equal_button" parent="plain_numbers">
+        <item name="android:background">@drawable/equals_button</item>
+    </style>
+
+    <!-- Double spaced buttons -->
+    <style name="double_spaced_buttons" parent="plain_numbers">
+        <item name="android:layout_weight">2</item>
+    </style>
+
+    <!-- Clear Button -->
+    <style name="clear_button" parent="double_spaced_buttons">
+        <item name="android:background">@drawable/cancel_button</item>
+    </style>
+
+    <style name="lollipop_fix">
+
+    </style>
 
 </resources>
