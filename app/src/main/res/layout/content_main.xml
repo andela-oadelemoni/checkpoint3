@@ -52,19 +52,20 @@
 
     </LinearLayout>
 
-    <!-- Calculator screen -->
-    <TextView
-        android:id="@+id/calculator_screen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:textSize="36sp" />
-
     <!-- Force Calculator layout to be at the bottom of the screen -->
     <View
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1" />
+    <!-- Calculator screen -->
+
+    <TextView
+        android:id="@+id/calculator_screen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:textSize="36sp"
+        android:padding="@dimen/default_app_padding"/>
 
     <!-- Calculator interface -->
     <LinearLayout
