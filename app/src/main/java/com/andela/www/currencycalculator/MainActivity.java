@@ -1,8 +1,6 @@
 package com.andela.www.currencycalculator;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -11,7 +9,6 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -22,7 +19,9 @@ public class MainActivity extends AppCompatActivity {
     private String previousInput = "";
     private String currentInput = "";
     private Spinner startingCurrency;
-    private CurrencyAdapter spinnerAdapter;
+    private Spinner destinationCurrency;
+    private CurrencyAdapter destinationSpinnerAdapter;
+    private CurrencyAdapter startingSpinnerAdapter;
     public ArrayList<CurrencyModel> currencyValues = new ArrayList<>();
 
     @Override
@@ -40,15 +39,18 @@ public class MainActivity extends AppCompatActivity {
         /******* Firstly take data in model object ******/
         sched.setCurrencyName("Company ");
         sched.setImage("image");
-        sched.setUrl("http:\\www.company.com");
+        sched.setUrl("http://www.company.com");
 
         /******** Take Model Object in ArrayList **********/
         currencyValues.add(sched);
 
         startingCurrency = (Spinner) findViewById(R.id.starting_currency_picker);
-        spinnerAdapter = new CurrencyAdapter(this, R.layout.spinner_rows, currencyValues, getResources());
+        destinationCurrency = (Spinner) findViewById(R.id.destination_currency_picker);
+        destinationSpinnerAdapter = new CurrencyAdapter(this, R.layout.spinner_rows, currencyValues, getResources(), false);
+        startingSpinnerAdapter = new CurrencyAdapter(this, R.layout.spinner_rows, currencyValues, getResources(), true);
 
-        startingCurrency.setAdapter(spinnerAdapter);
+        startingCurrency.setAdapter(startingSpinnerAdapter);
+        destinationCurrency.setAdapter(destinationSpinnerAdapter);
     }
 
     @Override
@@ -110,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
     private void processNumberClick(int number) {
         if (!zeroInput(number))
             currentInput += number;
+            previousInput = currentInput;
         displayResult(currentInput);
     }
 

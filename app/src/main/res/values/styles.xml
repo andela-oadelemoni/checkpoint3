@@ -55,4 +55,8 @@
         <item name="android:background">@drawable/cancel_button</item>
     </style>
 
+    <style name="lollipop_fix">
+
+    </style>
+
 </resources>

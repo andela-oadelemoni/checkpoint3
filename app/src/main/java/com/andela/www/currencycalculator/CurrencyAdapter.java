@@ -19,20 +19,22 @@ public class CurrencyAdapter extends ArrayAdapter<String> {
 
     private Activity activity;
     private ArrayList data;
+    private boolean isStartingCurrency;
     public Resources res;
     CurrencyModel tempValues=null;
     LayoutInflater inflater;
 
     /*************  CustomAdapter Constructor *****************/
     public CurrencyAdapter(Context context, int textViewResourceId, ArrayList objects,
-            Resources resLocal)
-    {
+            Resources resLocal, boolean isStartingCurrency) {
+
         super(context, textViewResourceId, objects);
 
         /********** Take passed values **********/
         activity = (Activity) context;
         data     = objects;
         res      = resLocal;
+        this.isStartingCurrency = isStartingCurrency;
 
         /***********  Layout inflator to call external xml layout () **********************/
         inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -59,15 +61,16 @@ public class CurrencyAdapter extends ArrayAdapter<String> {
         tempValues = null;
         tempValues = (CurrencyModel) data.get(position);
 
-        TextView label        = (TextView)row.findViewById(R.id.company);
+        TextView label        = (TextView)row.findViewById(R.id.currency);
         TextView sub          = (TextView)row.findViewById(R.id.sub);
         ImageView companyLogo = (ImageView)row.findViewById(R.id.image);
 
         if(position==0){
 
             // Default selected Spinner item
-            label.setText("Please select company");
-            sub.setText("");
+            label.setText(R.string.spinner_label_text);
+            if (isStartingCurrency) sub.setText(R.string.starting_sub_text);
+            else sub.setText(R.string.destination_sub_text);
         }
         else
         {
