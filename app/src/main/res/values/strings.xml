@@ -23,11 +23,39 @@
     <string name="back_button_text">Back</string>
 
     <string name="hello">Custom Spinner</string>
-    <string name="defaultText">  Select your Company  </string>
 
-    <string name="select_Category">Select Company</string>
-    <string name="spinner_label_text">Select Currency</string>
     <string name="starting_sub_text">From</string>
     <string name="destination_sub_text">To</string>
     <drawable name="darkgrey">#606060</drawable>
+
+    <!-- Currency List -->
+    <!-- as strings -->
+    <string name="us_dollar">USD</string>
+    <string name="euro">EUR</string>
+    <string name="gb_pound">GBP</string>
+    <string name="canadian_dollar">CAD</string>
+    <string name="australian_dollar">AUD</string>
+    <string name="japanese_yen">JPY</string>
+    <string name="chinese_yuan">CHY</string>
+    <string name="swiss_franc">CHF</string>
+    <string name="hong_kong_dollar">HKD</string>
+    <string name="swedish_krona">SEK</string>
+    <string name="new_zealand_dollar">NZD</string>
+    <string name="nigerian_dollar">NGN</string>
+    <string name="currency_image">Currency Image</string>
+    <!-- as string array -->
+    <string-array name="currency_list">
+        <item>@string/us_dollar</item>
+        <item>@string/euro</item>
+        <item>@string/gb_pound</item>
+        <item>@string/canadian_dollar</item>
+        <item>@string/australian_dollar</item>
+        <item>@string/japanese_yen</item>
+        <item>@string/chinese_yuan</item>
+        <item>@string/swiss_franc</item>
+        <item>@string/hong_kong_dollar</item>
+        <item>@string/swedish_krona</item>
+        <item>@string/new_zealand_dollar</item>
+        <item>@string/nigerian_dollar</item>
+    </string-array>
 </resources>

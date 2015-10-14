@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kamiye on 10/9/15.
@@ -18,27 +19,19 @@ import java.util.ArrayList;
 public class CurrencyAdapter extends ArrayAdapter<String> {
 
     private Activity activity;
-    private ArrayList data;
-    private boolean isStartingCurrency;
-    public Resources res;
-    CurrencyModel tempValues=null;
-    LayoutInflater inflater;
+    private List currencies;
+    private Resources res;
+    private CurrencyModel tempValues;
+    private LayoutInflater inflater;
 
-    /*************  CustomAdapter Constructor *****************/
-    public CurrencyAdapter(Context context, int textViewResourceId, ArrayList objects,
-            Resources resLocal, boolean isStartingCurrency) {
+    // Constructor
+    public CurrencyAdapter(Context context, int textViewResourceId, List objects, Resources resLocal) {
 
         super(context, textViewResourceId, objects);
-
-        /********** Take passed values **********/
         activity = (Activity) context;
-        data     = objects;
-        res      = resLocal;
-        this.isStartingCurrency = isStartingCurrency;
-
-        /***********  Layout inflator to call external xml layout () **********************/
+        currencies = objects;
+        res = resLocal;
         inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
     }
 
     @Override
@@ -51,37 +44,20 @@ public class CurrencyAdapter extends ArrayAdapter<String> {
         return getCustomView(position, convertView, parent);
     }
 
-    // This funtion called for each row ( Called data.size() times )
+    // This function called for each row ( Called data.size() times )
     public View getCustomView(int position, View convertView, ViewGroup parent) {
 
-        /********** Inflate spinner_rows.xml file for each row ( Defined below ) ************/
         View row = inflater.inflate(R.layout.spinner_rows, parent, false);
 
-        /***** Get each Model object from Arraylist ********/
         tempValues = null;
-        tempValues = (CurrencyModel) data.get(position);
+        tempValues = (CurrencyModel) currencies.get(position);
 
-        TextView label        = (TextView)row.findViewById(R.id.currency);
-        TextView sub          = (TextView)row.findViewById(R.id.sub);
-        ImageView companyLogo = (ImageView)row.findViewById(R.id.image);
+        TextView label = (TextView)row.findViewById(R.id.currency);
+        ImageView currencyLogo = (ImageView)row.findViewById(R.id.image);
 
-        if(position==0){
-
-            // Default selected Spinner item
-            label.setText(R.string.spinner_label_text);
-            if (isStartingCurrency) sub.setText(R.string.starting_sub_text);
-            else sub.setText(R.string.destination_sub_text);
-        }
-        else
-        {
-            // Set values for spinner each row
-            label.setText(tempValues.getCurrencyName());
-            sub.setText(tempValues.getUrl());
-            companyLogo.setImageResource(res.getIdentifier
-                    ("com.androidexample.customspinner:drawable/"
-                            + tempValues.getImage(),null,null));
-
-        }
+        // Set values for spinner each row
+        label.setText(tempValues.getCurrencyName());
+        currencyLogo.setImageResource(tempValues.getImage());
 
         return row;
     }
