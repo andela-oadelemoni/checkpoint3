@@ -1,8 +1,6 @@
-package com.andela.www.currencycalculator;
+package com.andela.www.currencycalculator.model;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
+import com.andela.www.currencycalculator.R;
 
 import java.util.ArrayList;
 import java.util.List;
