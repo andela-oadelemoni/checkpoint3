@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.andela.www.currencycalculator.InputHandler;
 import com.andela.www.currencycalculator.adapter.CurrencyAdapter;
 import com.andela.www.currencycalculator.model.CurrencyModel;
 import com.andela.www.currencycalculator.R;
@@ -19,14 +20,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView calculator_screen;
-    private float lastResult = 0;
-    private String previousInput = "";
-    private String currentInput = "";
-    private Spinner startingCurrency;
-    private Spinner destinationCurrency;
-    private CurrencyAdapter currencyAdapter;
     public List<CurrencyModel> currencyValues = new ArrayList<>();
+    // Input helper
+    private InputHandler inputHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +31,24 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Initialize method to set spinner values
+        init();
+    }
+
+    private void init() {
         // set calculator screen
-        calculator_screen = (TextView) findViewById(R.id.calculator_screen);
+        TextView calculator_screen = (TextView) findViewById(R.id.calculator_screen);
+        TextView mini_screen = (TextView) findViewById(R.id.mini_screen);
+
+        // set input helper
+        inputHandler = new InputHandler(this, calculator_screen, mini_screen);
 
         String[] currencyList = getResources().getStringArray(R.array.currency_list);
         currencyValues = CurrencyModel.getCurrencies(currencyList);
 
-        startingCurrency = (Spinner) findViewById(R.id.starting_currency_picker);
-        destinationCurrency = (Spinner) findViewById(R.id.destination_currency_picker);
-        currencyAdapter = new CurrencyAdapter(this, R.layout.spinner_rows, currencyValues, getResources());
+        Spinner startingCurrency = (Spinner) findViewById(R.id.starting_currency_picker);
+        Spinner destinationCurrency = (Spinner) findViewById(R.id.destination_currency_picker);
+        CurrencyAdapter currencyAdapter = new CurrencyAdapter(this, R.layout.spinner_rows, currencyValues, getResources());
 
         startingCurrency.setAdapter(currencyAdapter);
         destinationCurrency.setAdapter(currencyAdapter);
@@ -85,54 +90,22 @@ public class MainActivity extends AppCompatActivity {
             case R.id.number_9:
                 // get the integer value of the number
                 int value = Integer.valueOf(((Button) view).getText().toString());
-                processNumberClick(value);
+                inputHandler.numberPressed(value);
                 break;
             case R.id.divide:
             case R.id.multiply:
             case R.id.add:
             case R.id.subtract:
-                arithmeticOperation(view.getId());
                 break;
-            case R.id.cancel_action:
-                resetCalculator();
+            case R.id.clear:
                 break;
             case R.id.back:
-                backOneSpace();
                 break;
             case R.id.equal:
-                calculate();
+                break;
+            case R.id.decimal:
+                inputHandler.decimalPressed();
                 break;
         }
-    }
-
-    private void processNumberClick(int number) {
-        if (!zeroInput(number))
-            currentInput += number;
-            previousInput = currentInput;
-        displayResult(currentInput);
-    }
-
-    private boolean zeroInput(int number) {
-        return (previousInput.equals("") && number == 0);
-    }
-
-    private void arithmeticOperation(int operand) {
-
-    }
-
-    private void calculate() {
-
-    }
-
-    private void resetCalculator() {
-
-    }
-
-    private void backOneSpace() {
-
-    }
-
-    private void displayResult(String result) {
-        calculator_screen.setText(result);
     }
 }
