@@ -11,6 +11,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,9 +22,8 @@ public class MainActivity extends AppCompatActivity {
     private String currentInput = "";
     private Spinner startingCurrency;
     private Spinner destinationCurrency;
-    private CurrencyAdapter destinationSpinnerAdapter;
-    private CurrencyAdapter startingSpinnerAdapter;
-    public ArrayList<CurrencyModel> currencyValues = new ArrayList<>();
+    private CurrencyAdapter currencyAdapter;
+    public List<CurrencyModel> currencyValues = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,23 +35,15 @@ public class MainActivity extends AppCompatActivity {
         // set calculator screen
         calculator_screen = (TextView) findViewById(R.id.calculator_screen);
 
-        CurrencyModel sched = new CurrencyModel();
-
-        /******* Firstly take data in model object ******/
-        sched.setCurrencyName("Company ");
-        sched.setImage("image");
-        sched.setUrl("http://www.company.com");
-
-        /******** Take Model Object in ArrayList **********/
-        currencyValues.add(sched);
+        String[] currencyList = getResources().getStringArray(R.array.currency_list);
+        currencyValues = CurrencyModel.getCurrencies(currencyList);
 
         startingCurrency = (Spinner) findViewById(R.id.starting_currency_picker);
         destinationCurrency = (Spinner) findViewById(R.id.destination_currency_picker);
-        destinationSpinnerAdapter = new CurrencyAdapter(this, R.layout.spinner_rows, currencyValues, getResources(), false);
-        startingSpinnerAdapter = new CurrencyAdapter(this, R.layout.spinner_rows, currencyValues, getResources(), true);
+        currencyAdapter = new CurrencyAdapter(this, R.layout.spinner_rows, currencyValues, getResources());
 
-        startingCurrency.setAdapter(startingSpinnerAdapter);
-        destinationCurrency.setAdapter(destinationSpinnerAdapter);
+        startingCurrency.setAdapter(currencyAdapter);
+        destinationCurrency.setAdapter(currencyAdapter);
     }
 
     @Override
