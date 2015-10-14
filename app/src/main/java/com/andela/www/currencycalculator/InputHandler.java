@@ -38,7 +38,14 @@ public class InputHandler {
             currentInput += (initialInput == 0) ? "0." : "." ;
             initialInput = Float.valueOf(currentInput);
         }
-        dotPressed = true;
+        setDotPressed();
+        setDisplay();
+    }
+
+    public void clearPressed() {
+        initialInput = 0;
+        currentInput = "";
+        setDotUnpressed();
         setDisplay();
     }
 
@@ -46,13 +53,21 @@ public class InputHandler {
         return !dotPressed && (initialInput == 0 && number == 0);
     }
 
+    private void setDotPressed() {
+        dotPressed = true;
+    }
+
+    private void setDotUnpressed() {
+        dotPressed = false;
+    }
+
     private void setDisplay() {
         if (currentInput.equals("")) screen.setText("0");
         else screen.setText(currentInput);
     }
 
-    /*private void setMiniDisplay() {
+    private void setMiniDisplay() {
         String mini_display = ((Number)initialInput).toString();
         mini_screen.setText(mini_display);
-    }*/
+    }
 }

@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.subtract:
                 break;
             case R.id.clear:
+                inputHandler.clearPressed();
                 break;
             case R.id.back:
                 break;
