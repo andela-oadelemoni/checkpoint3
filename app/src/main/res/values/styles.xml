@@ -57,7 +57,13 @@
     </style>
 
     <style name="lollipop_fix">
+    </style>
 
+    <!-- spinner pointes -->
+    <style name="spinner_pointers">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:layout_marginLeft">5dp</item>
     </style>
 
 </resources>

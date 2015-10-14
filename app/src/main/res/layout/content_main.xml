@@ -24,6 +24,12 @@
         </Spinner>
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/spinner_pointers"
+            android:text="@string/destination_sub_text"/>
+
+        <TextView
             android:id="@+id/destination_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -44,6 +50,12 @@
             android:layout_height="wrap_content">
 
         </Spinner>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/spinner_pointers"
+            android:text="@string/starting_sub_text"/>
 
         <TextView
             android:id="@+id/starting_currency"
