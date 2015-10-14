@@ -1,4 +1,4 @@
-package com.andela.www.currencycalculator;
+package com.andela.www.currencycalculator.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,8 +10,11 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.andela.www.currencycalculator.adapter.CurrencyAdapter;
+import com.andela.www.currencycalculator.model.CurrencyModel;
+import com.andela.www.currencycalculator.R;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
