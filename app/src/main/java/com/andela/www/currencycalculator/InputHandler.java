@@ -2,18 +2,27 @@ package com.andela.www.currencycalculator;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.TextView;
+
+import java.util.Stack;
 
 /**
  * Created by kamiye on 10/14/15.
  */
 public class InputHandler {
 
+    // context
+    private Context context;
+    // screen
     private TextView screen;
     private TextView mini_screen;
-    private Context context;
+    // input values
     private float initialInput = 0;
     private String currentInput = "";
+    // history stack
+    private Stack<String> backHistory = new Stack();
+    // decimal notifier
     private boolean dotPressed = false;
 
     public InputHandler(Context context, TextView screen, TextView mini_screen) {
@@ -29,6 +38,7 @@ public class InputHandler {
         if (!isInvalidInput(number)) {
             currentInput += number;
             initialInput = Float.valueOf(currentInput);
+            backHistory.push(currentInput);
         }
         setDisplay();
     }
@@ -37,6 +47,7 @@ public class InputHandler {
         if (!dotPressed) {
             currentInput += (initialInput == 0) ? "0." : "." ;
             initialInput = Float.valueOf(currentInput);
+            backHistory.push(currentInput);
         }
         setDotPressed();
         setDisplay();
@@ -45,8 +56,24 @@ public class InputHandler {
     public void clearPressed() {
         initialInput = 0;
         currentInput = "";
+        backHistory.clear();
         setDotUnpressed();
         setDisplay();
+    }
+
+    public void backPressed() {
+        if (backHistory.size() > 1) {
+            // check removed string for decimal
+            String inspectPop = backHistory.pop();
+            if (inspectPop.substring(inspectPop.length() - 1).equals(".")) setDotUnpressed();
+
+            currentInput = backHistory.pop();
+            initialInput = Float.valueOf(currentInput);
+            backHistory.push(currentInput);
+            setDisplay();
+        }
+        else
+            clearPressed();
     }
 
     private boolean isInvalidInput(int number) {
