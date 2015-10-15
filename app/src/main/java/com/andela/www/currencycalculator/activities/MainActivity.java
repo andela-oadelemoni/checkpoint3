@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 inputHandler.clearPressed();
                 break;
             case R.id.back:
+                inputHandler.backPressed();
                 break;
             case R.id.equal:
                 break;
