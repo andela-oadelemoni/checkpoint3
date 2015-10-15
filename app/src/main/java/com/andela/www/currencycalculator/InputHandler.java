@@ -5,7 +5,11 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.andela.www.currencycalculator.utility.ArithmeticOperand;
+import com.andela.www.currencycalculator.utility.Calculator;
+
 import java.util.Stack;
+import java.util.regex.Pattern;
 
 /**
  * Created by kamiye on 10/14/15.
@@ -18,12 +22,17 @@ public class InputHandler {
     private TextView screen;
     private TextView mini_screen;
     // input values
+    private float firstNumber = 0;
     private float initialInput = 0;
     private String currentInput = "";
     // history stack
-    private Stack<String> backHistory = new Stack();
+    private Stack<String> backHistory = new Stack<>();
     // decimal notifier
     private boolean dotPressed = false;
+    // calculator screen
+    private Calculator calculator = new Calculator();
+    // active operand
+    private ArithmeticOperand operand = ArithmeticOperand.EQUAL;
 
     public InputHandler(Context context, TextView screen, TextView mini_screen) {
         this.context = context;
@@ -54,10 +63,12 @@ public class InputHandler {
     }
 
     public void clearPressed() {
+        firstNumber = 0;
         initialInput = 0;
         currentInput = "";
         backHistory.clear();
         setDotUnpressed();
+        clearMiniDisplay();
         setDisplay();
     }
 
@@ -74,6 +85,22 @@ public class InputHandler {
         }
         else
             clearPressed();
+    }
+
+    public void additionPressed() {
+        setOperand(ArithmeticOperand.ADD);
+        firstNumber += initialInput;
+        setMiniDisplay();
+        currentInput = "";
+        initialInput = 0;
+        setDotUnpressed();
+        backHistory.clear();
+        setDisplay();
+        //calculator.setFirstNumber(initialInput);
+    }
+
+    private void setOperand(ArithmeticOperand operand) {
+        this.operand = operand;
     }
 
     private boolean isInvalidInput(int number) {
@@ -94,7 +121,26 @@ public class InputHandler {
     }
 
     private void setMiniDisplay() {
-        String mini_display = ((Number)initialInput).toString();
+        String operandString = "";
+        String display_number = processMiniScreenDisplay();
+        switch (operand) {
+            case ADD:
+                operandString = " +";
+                break;
+        }
+        String mini_display = display_number+operandString;
         mini_screen.setText(mini_display);
+    }
+
+    private void clearMiniDisplay() {
+        mini_screen.setText("");
+    }
+
+    private String processMiniScreenDisplay() {
+        // convert firstNumber to string
+        String display = firstNumber+"";
+        // check if initialInput is integer
+        if (this.firstNumber % 1 == 0) return display.split(Pattern.quote("."))[0];
+        else return display;
     }
 }
