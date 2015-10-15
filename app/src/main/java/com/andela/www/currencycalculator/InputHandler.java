@@ -2,7 +2,6 @@ package com.andela.www.currencycalculator;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.andela.www.currencycalculator.utility.ArithmeticOperand;
@@ -29,6 +28,7 @@ public class InputHandler {
     private Stack<String> backHistory = new Stack<>();
     // decimal notifier
     private boolean dotPressed = false;
+    private boolean isFirstOperation = true;
     // calculator screen
     private Calculator calculator = new Calculator();
     // active operand
@@ -69,6 +69,7 @@ public class InputHandler {
         backHistory.clear();
         setDotUnpressed();
         clearMiniDisplay();
+        isFirstOperation = true;
         setDisplay();
     }
 
@@ -99,6 +100,19 @@ public class InputHandler {
         //calculator.setFirstNumber(initialInput);
     }
 
+    public void subtractionPressed() {
+        setOperand(ArithmeticOperand.SUBTRACT);
+        if (firstNumber == 0 && isFirstOperation) firstNumber = initialInput;
+        else firstNumber -= initialInput;
+        setMiniDisplay();
+        currentInput = "";
+        initialInput = 0;
+        setDotUnpressed();
+        backHistory.clear();
+        isFirstOperation = false;
+        setDisplay();
+    }
+
     private void setOperand(ArithmeticOperand operand) {
         this.operand = operand;
     }
@@ -126,6 +140,9 @@ public class InputHandler {
         switch (operand) {
             case ADD:
                 operandString = " +";
+                break;
+            case SUBTRACT:
+                operandString = " -";
                 break;
         }
         String mini_display = display_number+operandString;
