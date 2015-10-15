@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 inputHandler.additionPressed();
                 break;
             case R.id.subtract:
+                inputHandler.subtractionPressed();
                 break;
             case R.id.clear:
                 inputHandler.clearPressed();
