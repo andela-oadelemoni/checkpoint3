@@ -93,8 +93,12 @@ public class MainActivity extends AppCompatActivity {
                 inputHandler.numberPressed(value);
                 break;
             case R.id.divide:
+                break;
             case R.id.multiply:
+                break;
             case R.id.add:
+                inputHandler.additionPressed();
+                break;
             case R.id.subtract:
                 break;
             case R.id.clear:

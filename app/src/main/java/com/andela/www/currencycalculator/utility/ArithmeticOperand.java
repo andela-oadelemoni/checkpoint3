@@ -7,5 +7,6 @@ public enum ArithmeticOperand {
     ADD,
     SUBTRACT,
     DIVIDE,
-    MULTIPLY
+    MULTIPLY,
+    EQUAL
 }
