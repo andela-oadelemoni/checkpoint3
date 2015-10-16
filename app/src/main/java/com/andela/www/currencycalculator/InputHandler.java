@@ -57,7 +57,8 @@ public class InputHandler {
 
     public void decimalPressed() {
         if (!dotPressed) {
-            currentInput += (initialInput == 0) ? "0." : "." ;
+            if (currentInput.equals("0")) currentInput = "0.";
+            else currentInput += (initialInput == 0) ? "0." : "." ;
             initialInput = Float.valueOf(currentInput);
             backHistory.push(currentInput);
         }
@@ -95,7 +96,7 @@ public class InputHandler {
     }
 
     public void additionPressed() {
-        // perform previous calculations
+
         if (operand != ArithmeticOperand.EQUAL && operand != ArithmeticOperand.ADD) {
             performCalculation();
         }
@@ -107,6 +108,7 @@ public class InputHandler {
     }
 
     public void subtractionPressed() {
+
         if (operand != ArithmeticOperand.EQUAL && operand != ArithmeticOperand.SUBTRACT) {
             performCalculation();
         }
@@ -117,6 +119,7 @@ public class InputHandler {
     }
 
     public void multiplicationPressed() {
+
         if (operand != ArithmeticOperand.EQUAL && operand != ArithmeticOperand.MULTIPLY) {
             performCalculation();
         }
@@ -127,6 +130,7 @@ public class InputHandler {
     }
 
     public void divisionPressed() {
+
         if (operand != ArithmeticOperand.EQUAL && operand != ArithmeticOperand.DIVIDE) {
             performCalculation();
         }
@@ -134,6 +138,13 @@ public class InputHandler {
         else if (!currentInput.equals("")) firstNumber /= initialInput;
         setOperand(ArithmeticOperand.DIVIDE);
         cleanUpOperation();
+    }
+
+    public void equalPressed() {
+        performCalculation();
+        cleanUpOperation();
+        clearMiniDisplay();
+        setOperand(ArithmeticOperand.EQUAL);
     }
 
     private void cleanUpOperation() {
@@ -147,7 +158,7 @@ public class InputHandler {
     }
 
     private void performCalculation() {
-        if (!currentInput.equals("")) {
+        if (!currentInput.equals("") && operand != ArithmeticOperand.EQUAL) {
             calculator.setOperand(operand);
             calculator.setFirstNumber(firstNumber);
             calculator.setSecondNumber(initialInput);

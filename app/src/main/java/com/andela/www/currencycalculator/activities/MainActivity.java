@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 inputHandler.backPressed();
                 break;
             case R.id.equal:
+                inputHandler.equalPressed();
                 break;
             case R.id.decimal:
                 inputHandler.decimalPressed();
