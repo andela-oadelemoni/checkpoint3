@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.divide:
                 break;
             case R.id.multiply:
+                inputHandler.multiplicationPressed();
                 break;
             case R.id.add:
                 inputHandler.additionPressed();

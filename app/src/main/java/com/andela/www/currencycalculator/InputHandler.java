@@ -2,11 +2,15 @@ package com.andela.www.currencycalculator;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.andela.www.currencycalculator.utility.ArithmeticOperand;
 import com.andela.www.currencycalculator.utility.Calculator;
 
+import java.util.ArrayDeque;
+import java.util.Iterator;
+import java.util.Queue;
 import java.util.Stack;
 import java.util.regex.Pattern;
 
@@ -26,6 +30,7 @@ public class InputHandler {
     private String currentInput = "";
     // history stack
     private Stack<String> backHistory = new Stack<>();
+    private ArrayDeque<String> computationHistory = new ArrayDeque<>();
     // decimal notifier
     private boolean dotPressed = false;
     private boolean isFirstOperation = true;
@@ -67,6 +72,7 @@ public class InputHandler {
         initialInput = 0;
         currentInput = "";
         backHistory.clear();
+        computationHistory.clear();
         setDotUnpressed();
         clearMiniDisplay();
         isFirstOperation = true;
@@ -96,7 +102,7 @@ public class InputHandler {
         initialInput = 0;
         setDotUnpressed();
         backHistory.clear();
-        setDisplay();
+        setMainDisplay();
         //calculator.setFirstNumber(initialInput);
     }
 
@@ -110,7 +116,20 @@ public class InputHandler {
         setDotUnpressed();
         backHistory.clear();
         isFirstOperation = false;
-        setDisplay();
+        setMainDisplay();
+    }
+
+    public void multiplicationPressed() {
+        setOperand(ArithmeticOperand.MULTIPLY);
+        if (firstNumber == 0 && isFirstOperation) firstNumber = initialInput;
+        else if (!currentInput.equals("")) firstNumber *= initialInput;
+        setMiniDisplay();
+        currentInput = "";
+        initialInput = 0;
+        setDotUnpressed();
+        backHistory.clear();
+        isFirstOperation = false;
+        setMainDisplay();
     }
 
     private void setOperand(ArithmeticOperand operand) {
@@ -134,19 +153,35 @@ public class InputHandler {
         else screen.setText(currentInput);
     }
 
+    private void setMainDisplay() {
+        String display = processScreenDisplay();
+        screen.setText(display);
+    }
+
+    private String processScreenDisplay() {
+        // convert firstNumber to string
+        String display = firstNumber+"";
+        // check if initialInput is integer
+        if (this.firstNumber % 1 == 0) return display.split(Pattern.quote("."))[0];
+        else return display;
+    }
+
     private void setMiniDisplay() {
         String operandString = "";
         String display_number = processMiniScreenDisplay();
         switch (operand) {
             case ADD:
-                operandString = " +";
+                operandString = " + ";
                 break;
             case SUBTRACT:
-                operandString = " -";
+                operandString = " - ";
+                break;
+            case MULTIPLY:
+                operandString = " x ";
                 break;
         }
-        String mini_display = display_number+operandString;
-        mini_screen.setText(mini_display);
+        String finalDisplay = display_number + operandString;
+        mini_screen.setText(finalDisplay);
     }
 
     private void clearMiniDisplay() {
