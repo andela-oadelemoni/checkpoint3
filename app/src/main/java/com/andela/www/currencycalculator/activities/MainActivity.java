@@ -29,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
     private CurrencyConverter converter;
     private String activePosition = "USD";
 
+    private TextView destinationCurrency;
+    private TextView baseCurrency;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
         // set calculator screen
         TextView calculator_screen = (TextView) findViewById(R.id.calculator_screen);
         TextView mini_screen = (TextView) findViewById(R.id.mini_screen);
+
+        // currency display screens
+        destinationCurrency = (TextView) findViewById(R.id.destination_currency);
+        baseCurrency = (TextView) findViewById(R.id.starting_currency);
 
         // set input helper
         inputHandler = new InputHandler(this, calculator_screen, mini_screen);
@@ -88,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String currency) {
                 Toast.makeText(MainActivity.this, "Conversion is " + currency, Toast.LENGTH_LONG).show();
+                destinationCurrency.setText(currency);
             }
 
             @Override
