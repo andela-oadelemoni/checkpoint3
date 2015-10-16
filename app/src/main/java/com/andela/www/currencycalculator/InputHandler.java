@@ -4,13 +4,9 @@ package com.andela.www.currencycalculator;
 import android.content.Context;
 import android.util.Log;
 import android.widget.TextView;
-
 import com.andela.www.currencycalculator.utility.ArithmeticOperand;
 import com.andela.www.currencycalculator.utility.Calculator;
-
 import java.util.ArrayDeque;
-import java.util.Iterator;
-import java.util.Queue;
 import java.util.Stack;
 import java.util.regex.Pattern;
 
@@ -75,6 +71,7 @@ public class InputHandler {
         computationHistory.clear();
         setDotUnpressed();
         clearMiniDisplay();
+        operand = ArithmeticOperand.EQUAL;
         isFirstOperation = true;
         setDisplay();
     }
@@ -95,8 +92,12 @@ public class InputHandler {
     }
 
     public void additionPressed() {
+        // perform previous calculations
+        if (operand != ArithmeticOperand.EQUAL && operand != ArithmeticOperand.ADD) {
+            performCalculation();
+        }
+        else firstNumber += initialInput;
         setOperand(ArithmeticOperand.ADD);
-        firstNumber += initialInput;
         setMiniDisplay();
         currentInput = "";
         initialInput = 0;
@@ -107,9 +108,12 @@ public class InputHandler {
     }
 
     public void subtractionPressed() {
-        setOperand(ArithmeticOperand.SUBTRACT);
-        if (firstNumber == 0 && isFirstOperation) firstNumber = initialInput;
+        if (operand != ArithmeticOperand.EQUAL && operand != ArithmeticOperand.SUBTRACT) {
+            performCalculation();
+        }
+        else if (firstNumber == 0 && isFirstOperation) firstNumber = initialInput;
         else firstNumber -= initialInput;
+        setOperand(ArithmeticOperand.SUBTRACT);
         setMiniDisplay();
         currentInput = "";
         initialInput = 0;
@@ -120,9 +124,12 @@ public class InputHandler {
     }
 
     public void multiplicationPressed() {
-        setOperand(ArithmeticOperand.MULTIPLY);
-        if (firstNumber == 0 && isFirstOperation) firstNumber = initialInput;
+        if (operand != ArithmeticOperand.EQUAL && operand != ArithmeticOperand.MULTIPLY) {
+            performCalculation();
+        }
+        else if (firstNumber == 0 && isFirstOperation) firstNumber = initialInput;
         else if (!currentInput.equals("")) firstNumber *= initialInput;
+        setOperand(ArithmeticOperand.MULTIPLY);
         setMiniDisplay();
         currentInput = "";
         initialInput = 0;
@@ -130,6 +137,17 @@ public class InputHandler {
         backHistory.clear();
         isFirstOperation = false;
         setMainDisplay();
+    }
+
+    private void performCalculation() {
+        if (!currentInput.equals("")) {
+            calculator.setOperand(operand);
+            calculator.setFirstNumber(firstNumber);
+            calculator.setSecondNumber(initialInput);
+            firstNumber = calculator.calculate();
+            Log.i("Branch", "Branch visited");
+            Log.i("FirstNumber", firstNumber+"");
+        }
     }
 
     private void setOperand(ArithmeticOperand operand) {

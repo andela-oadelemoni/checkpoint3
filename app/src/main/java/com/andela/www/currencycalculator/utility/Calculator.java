@@ -54,7 +54,7 @@ public class Calculator {
 
     /* ACTION METHODS */
 
-    public Number calculate() {
+    public float calculate() {
         setNumbers();
         switch (operand) {
             case ADD:
