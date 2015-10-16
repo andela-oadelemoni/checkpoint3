@@ -69,6 +69,14 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1" />
+
+    <!-- Mini screen -->
+    <TextView
+        android:id="@+id/mini_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/default_app_padding"
+        style="@style/mimi_screen"/>
     <!-- Calculator screen -->
 
     <TextView
@@ -206,7 +214,7 @@
                 android:text="@string/zero" />
 
             <Button
-                android:id="@+id/point"
+                android:id="@+id/decimal"
                 style="@style/plain_numbers"
                 android:text="@string/point" />
 
