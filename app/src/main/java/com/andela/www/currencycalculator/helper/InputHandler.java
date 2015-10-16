@@ -1,4 +1,4 @@
-package com.andela.www.currencycalculator;
+package com.andela.www.currencycalculator.helper;
 
 
 import android.content.Context;
@@ -240,5 +240,9 @@ public class InputHandler {
         // check if initialInput is integer
         if (this.firstNumber % 1 == 0) return display.split(Pattern.quote("."))[0];
         else return display;
+    }
+
+    public Number getBaseValue() {
+        return firstNumber;
     }
 }
