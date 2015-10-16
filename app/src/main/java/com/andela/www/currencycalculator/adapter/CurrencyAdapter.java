@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.andela.www.currencycalculator.model.CurrencyModel;
+import com.andela.www.currencycalculator.model.Currency;
 import com.andela.www.currencycalculator.R;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class CurrencyAdapter extends ArrayAdapter<String> {
     private Activity activity;
     private List currencies;
     private Resources res;
-    private CurrencyModel tempValues;
+    private Currency tempValues;
     private LayoutInflater inflater;
 
     // Constructor
@@ -52,7 +52,7 @@ public class CurrencyAdapter extends ArrayAdapter<String> {
         View row = inflater.inflate(R.layout.spinner_rows, parent, false);
 
         tempValues = null;
-        tempValues = (CurrencyModel) currencies.get(position);
+        tempValues = (Currency) currencies.get(position);
 
         TextView label = (TextView)row.findViewById(R.id.currency);
         ImageView currencyLogo = (ImageView)row.findViewById(R.id.image);

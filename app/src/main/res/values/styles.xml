@@ -23,7 +23,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:onClick">buttonClickAction</item>
+        <item name="android:onClick">onClick</item>
     </style>
 
     <!-- Plain number grid styles -->
@@ -59,7 +59,7 @@
     <style name="lollipop_fix">
     </style>
 
-    <!-- spinner pointes -->
+    <!-- spinner pointers -->
     <style name="spinner_pointers">
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:textStyle">bold|italic</item>
@@ -70,6 +70,12 @@
     <style name="mimi_screen">
         <item name="android:layout_gravity">end</item>
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="currency_display_styles">
+        <item name="android:layout_gravity">right|center</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_marginRight">10dp</item>
     </style>
 
 </resources>

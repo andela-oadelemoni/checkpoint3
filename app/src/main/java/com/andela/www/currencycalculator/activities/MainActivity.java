@@ -6,23 +6,31 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.andela.www.currencycalculator.InputHandler;
+import com.andela.www.currencycalculator.helper.CurrencyConverter;
+import com.andela.www.currencycalculator.helper.InputHandler;
 import com.andela.www.currencycalculator.adapter.CurrencyAdapter;
-import com.andela.www.currencycalculator.model.CurrencyModel;
+import com.andela.www.currencycalculator.model.Currency;
 import com.andela.www.currencycalculator.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public List<CurrencyModel> currencyValues = new ArrayList<>();
+    public List<Currency> currencyValues = new ArrayList<>();
     // Input helper
     private InputHandler inputHandler;
+    private CurrencyConverter converter;
+    private String activePosition = "USD";
+
+    private TextView destinationCurrency;
+    private float baseValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,18 +48,67 @@ public class MainActivity extends AppCompatActivity {
         TextView calculator_screen = (TextView) findViewById(R.id.calculator_screen);
         TextView mini_screen = (TextView) findViewById(R.id.mini_screen);
 
+        // currency display screens
+        destinationCurrency = (TextView) findViewById(R.id.destination_currency);
+
         // set input helper
         inputHandler = new InputHandler(this, calculator_screen, mini_screen);
 
         String[] currencyList = getResources().getStringArray(R.array.currency_list);
-        currencyValues = CurrencyModel.getCurrencies(currencyList);
+        currencyValues = Currency.getCurrencies(currencyList);
 
         Spinner startingCurrency = (Spinner) findViewById(R.id.starting_currency_picker);
-        Spinner destinationCurrency = (Spinner) findViewById(R.id.destination_currency_picker);
+        final Spinner destinationCurrency = (Spinner) findViewById(R.id.destination_currency_picker);
         CurrencyAdapter currencyAdapter = new CurrencyAdapter(this, R.layout.spinner_rows, currencyValues, getResources());
 
         startingCurrency.setAdapter(currencyAdapter);
         destinationCurrency.setAdapter(currencyAdapter);
+
+        converter = new CurrencyConverter(MainActivity.this);
+
+        destinationCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Currency currency = (Currency) destinationCurrency.getItemAtPosition(position);
+                activePosition = currency.getCurrencyName();
+                doConversion();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        // conversion button
+        Button conversionButton = (Button) findViewById(R.id.conversionButton);
+        conversionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Currency currency = (Currency) destinationCurrency.getSelectedItem();
+                activePosition = currency.getCurrencyName();
+                doConversion();
+            }
+        });
+    }
+
+    private void doConversion() {
+        float baseValue = updateBaseValue();
+        converter.convertCurrency(baseValue, activePosition, new CurrencyConverter.ConfirmationCallback() {
+            @Override
+            public void onSuccess(String currency) {
+                Toast.makeText(MainActivity.this, "Conversion is " + currency, Toast.LENGTH_LONG).show();
+                destinationCurrency.setText(currency);
+            }
+
+            @Override
+            public void onFailure() {
+                Toast.makeText(MainActivity.this, "Conversion failed!!!!", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private float updateBaseValue() {
+        float base = (float) inputHandler.getBaseValue();
+
+        return (base == 0) ? 1 : base;
     }
 
     @Override
@@ -76,8 +133,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void buttonClickAction(View view) {
-        switch (view.getId()) {
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
             case R.id.number_0:
             case R.id.number_1:
             case R.id.number_2:
@@ -89,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.number_8:
             case R.id.number_9:
                 // get the integer value of the number
-                int value = Integer.valueOf(((Button) view).getText().toString());
+                int value = Integer.valueOf(((Button) v).getText().toString());
                 inputHandler.numberPressed(value);
                 break;
             case R.id.divide:
