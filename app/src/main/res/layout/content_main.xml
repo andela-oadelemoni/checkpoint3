@@ -30,7 +30,13 @@
             android:text="@string/destination_sub_text"/>
 
         <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
             android:id="@+id/destination_currency"
+            style="@style/currency_display_styles"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -58,9 +64,15 @@
             android:text="@string/starting_sub_text"/>
 
         <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
             android:id="@+id/starting_currency"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            style="@style/currency_display_styles"/>
 
     </LinearLayout>
 
