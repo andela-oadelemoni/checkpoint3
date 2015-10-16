@@ -23,6 +23,7 @@ public class InputHandler {
     // input values
     private float firstNumber = 0;
     private float initialInput = 0;
+    private String inputHistory = "";
     private String currentInput = "";
     // history stack
     private Stack<String> backHistory = new Stack<>();
@@ -46,7 +47,8 @@ public class InputHandler {
 
     public void numberPressed(int number) {
         if (!isInvalidInput(number)) {
-            currentInput += number;
+            if (!currentInput.equals("0")) currentInput += number;
+            else currentInput = String.valueOf(number);
             initialInput = Float.valueOf(currentInput);
             backHistory.push(currentInput);
         }
@@ -67,6 +69,7 @@ public class InputHandler {
         firstNumber = 0;
         initialInput = 0;
         currentInput = "";
+        inputHistory = "";
         backHistory.clear();
         computationHistory.clear();
         setDotUnpressed();
@@ -96,14 +99,10 @@ public class InputHandler {
         if (operand != ArithmeticOperand.EQUAL && operand != ArithmeticOperand.ADD) {
             performCalculation();
         }
-        else firstNumber += initialInput;
+        else if (firstNumber == 0 && isFirstOperation) firstNumber = initialInput;
+        else if (!currentInput.equals("")) firstNumber += initialInput;
         setOperand(ArithmeticOperand.ADD);
-        setMiniDisplay();
-        currentInput = "";
-        initialInput = 0;
-        setDotUnpressed();
-        backHistory.clear();
-        setMainDisplay();
+        cleanUpOperation();
         //calculator.setFirstNumber(initialInput);
     }
 
@@ -112,15 +111,9 @@ public class InputHandler {
             performCalculation();
         }
         else if (firstNumber == 0 && isFirstOperation) firstNumber = initialInput;
-        else firstNumber -= initialInput;
+        else if (!currentInput.equals("")) firstNumber -= initialInput;
         setOperand(ArithmeticOperand.SUBTRACT);
-        setMiniDisplay();
-        currentInput = "";
-        initialInput = 0;
-        setDotUnpressed();
-        backHistory.clear();
-        isFirstOperation = false;
-        setMainDisplay();
+        cleanUpOperation();
     }
 
     public void multiplicationPressed() {
@@ -130,6 +123,20 @@ public class InputHandler {
         else if (firstNumber == 0 && isFirstOperation) firstNumber = initialInput;
         else if (!currentInput.equals("")) firstNumber *= initialInput;
         setOperand(ArithmeticOperand.MULTIPLY);
+        cleanUpOperation();
+    }
+
+    public void divisionPressed() {
+        if (operand != ArithmeticOperand.EQUAL && operand != ArithmeticOperand.DIVIDE) {
+            performCalculation();
+        }
+        else if (firstNumber == 0 && isFirstOperation) firstNumber = initialInput;
+        else if (!currentInput.equals("")) firstNumber /= initialInput;
+        setOperand(ArithmeticOperand.DIVIDE);
+        cleanUpOperation();
+    }
+
+    private void cleanUpOperation() {
         setMiniDisplay();
         currentInput = "";
         initialInput = 0;
@@ -145,8 +152,6 @@ public class InputHandler {
             calculator.setFirstNumber(firstNumber);
             calculator.setSecondNumber(initialInput);
             firstNumber = calculator.calculate();
-            Log.i("Branch", "Branch visited");
-            Log.i("FirstNumber", firstNumber+"");
         }
     }
 
@@ -155,7 +160,11 @@ public class InputHandler {
     }
 
     private boolean isInvalidInput(int number) {
-        return !dotPressed && (initialInput == 0 && number == 0);
+        if (!dotPressed && (initialInput == 0 && number == 0)) {
+            currentInput = "0";
+            return true;
+        }
+        return false;
     }
 
     private void setDotPressed() {
@@ -167,7 +176,7 @@ public class InputHandler {
     }
 
     private void setDisplay() {
-        if (currentInput.equals("")) screen.setText("0");
+        if (currentInput.equals("") || currentInput.equals("0")) screen.setText("0");
         else screen.setText(currentInput);
     }
 
@@ -185,8 +194,14 @@ public class InputHandler {
     }
 
     private void setMiniDisplay() {
-        String operandString = "";
+        String operandString = getOperandString();
         String display_number = processMiniScreenDisplay();
+        String finalDisplay = display_number + operandString;
+        mini_screen.setText(finalDisplay);
+    }
+
+    private String getOperandString() {
+        String operandString = "";
         switch (operand) {
             case ADD:
                 operandString = " + ";
@@ -197,9 +212,11 @@ public class InputHandler {
             case MULTIPLY:
                 operandString = " x ";
                 break;
+            case DIVIDE:
+                operandString = " / ";
+                break;
         }
-        String finalDisplay = display_number + operandString;
-        mini_screen.setText(finalDisplay);
+        return operandString;
     }
 
     private void clearMiniDisplay() {
@@ -208,7 +225,7 @@ public class InputHandler {
 
     private String processMiniScreenDisplay() {
         // convert firstNumber to string
-        String display = firstNumber+"";
+        String display = String.valueOf(firstNumber);
         // check if initialInput is integer
         if (this.firstNumber % 1 == 0) return display.split(Pattern.quote("."))[0];
         else return display;
