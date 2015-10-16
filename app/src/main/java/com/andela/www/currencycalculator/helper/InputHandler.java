@@ -1,4 +1,4 @@
-package com.andela.www.currencycalculator;
+package com.andela.www.currencycalculator.helper;
 
 
 import android.content.Context;

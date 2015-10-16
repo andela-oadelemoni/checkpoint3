@@ -8,12 +8,12 @@ import java.util.List;
 /**
  * Created by kamiye on 10/9/15.
  */
-public class CurrencyModel {
+public class Currency {
 
     private String currencyName;
     private int imageId;
 
-    public CurrencyModel(String currencyName, int imageId) {
+    public Currency(String currencyName, int imageId) {
         this.currencyName = currencyName;
         this.imageId = imageId;
     }
@@ -40,12 +40,12 @@ public class CurrencyModel {
         return imageId;
     }
 
-    public static List<CurrencyModel> getCurrencies(String[] currencies) {
-        List<CurrencyModel> currencyObjects = new ArrayList<>();
+    public static List<Currency> getCurrencies(String[] currencies) {
+        List<Currency> currencyObjects = new ArrayList<>();
 
         for (String currency: currencies) {
             int drawableId = getDrawable(currency);
-            CurrencyModel currencyModel = new CurrencyModel(currency, drawableId);
+            Currency currencyModel = new Currency(currency, drawableId);
             currencyObjects.add(currencyModel);
         }
 
