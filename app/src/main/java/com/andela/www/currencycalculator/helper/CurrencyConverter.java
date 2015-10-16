@@ -27,7 +27,7 @@ public class CurrencyConverter {
         requestQueue = Volley.newRequestQueue(context);
     }
 
-    public void convertCurrency(String baseCurrency, final String convertedCurrency, final ConfirmationCallback callback) {
+    public void convertCurrency(final float baseCurrency, final String convertedCurrency, final ConfirmationCallback callback) {
         // check payment with paypal rest api
         JsonObjectRequest conversionRequest = new JsonObjectRequest(Request.Method.GET,
                 CONVERSION_URL, null, new Response.Listener<JSONObject>() {
@@ -35,7 +35,7 @@ public class CurrencyConverter {
             public void onResponse(JSONObject response) {
                 try {
                     rates = response.getJSONObject("rates");
-                    currency = rates.getDouble(convertedCurrency);
+                    currency = rates.getDouble(convertedCurrency) * baseCurrency;
                     Log.i("Currency", String.valueOf(currency));
                     callback.onSuccess(String.valueOf(currency));
                 } catch (JSONException e) {
