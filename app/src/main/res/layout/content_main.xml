@@ -14,7 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="4dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/LightGrey">
 
         <Spinner
             android:id="@+id/destination_currency_picker"
@@ -22,12 +23,6 @@
             android:layout_height="wrap_content">
 
         </Spinner>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/spinner_pointers"
-            android:text="@string/destination_sub_text"/>
 
         <TextView
             android:layout_width="0dp"
@@ -41,6 +36,47 @@
             android:layout_height="wrap_content" />
 
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/spinner_pointers"
+        android:text="@string/destination_sub_text"/>
+
+    <!-- Force Calculator layout to be at the bottom of the screen -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/conversionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:drawableLeft="@drawable/ic_action_line_chart"
+        android:drawableStart="@drawable/ic_action_line_chart"
+        android:text="@string/convert_text"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Mini screen -->
+    <TextView
+        android:id="@+id/mini_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/default_app_padding"
+        style="@style/mimi_screen"/>
+    <!-- Calculator screen -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/spinner_pointers"
+        android:text="@string/starting_sub_text"/>
 
     <!-- Starting Currency -->
     <LinearLayout
@@ -58,55 +94,18 @@
         </Spinner>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/spinner_pointers"
-            android:text="@string/starting_sub_text"/>
-
-        <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/starting_currency"
+            android:id="@+id/calculator_screen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="36sp"
             style="@style/currency_display_styles"/>
 
     </LinearLayout>
-
-    <!-- Force Calculator layout to be at the bottom of the screen -->
-    <Button
-        android:id="@+id/conversionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:drawableLeft="@drawable/ic_action_line_chart"
-        android:drawableStart="@drawable/ic_action_line_chart"
-        android:text="@string/convert_text"/>
-
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-    <!-- Mini screen -->
-    <TextView
-        android:id="@+id/mini_screen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/default_app_padding"
-        style="@style/mimi_screen"/>
-    <!-- Calculator screen -->
-
-    <TextView
-        android:id="@+id/calculator_screen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:textSize="36sp"
-        android:padding="@dimen/default_app_padding"/>
 
     <!-- Calculator interface -->
     <LinearLayout
@@ -114,6 +113,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="bottom"
+        android:background="@color/LightGrey"
         style="@style/lollipop_fix"
         android:padding="@dimen/default_app_padding">
 

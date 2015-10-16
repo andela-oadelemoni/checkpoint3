@@ -21,7 +21,7 @@ import com.andela.www.currencycalculator.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public List<Currency> currencyValues = new ArrayList<>();
     // Input helper
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private String activePosition = "USD";
 
     private TextView destinationCurrency;
-    private TextView baseCurrency;
+    private float baseValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
 
         // currency display screens
         destinationCurrency = (TextView) findViewById(R.id.destination_currency);
-        baseCurrency = (TextView) findViewById(R.id.starting_currency);
 
         // set input helper
         inputHandler = new InputHandler(this, calculator_screen, mini_screen);
@@ -91,7 +90,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void doConversion() {
-        converter.convertCurrency("anything", activePosition, new CurrencyConverter.ConfirmationCallback() {
+        float baseValue = updateBaseValue();
+        converter.convertCurrency(baseValue, activePosition, new CurrencyConverter.ConfirmationCallback() {
             @Override
             public void onSuccess(String currency) {
                 Toast.makeText(MainActivity.this, "Conversion is " + currency, Toast.LENGTH_LONG).show();
@@ -103,6 +103,12 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Conversion failed!!!!", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private float updateBaseValue() {
+        float base = (float) inputHandler.getBaseValue();
+
+        return (base == 0) ? 1 : base;
     }
 
     @Override
@@ -127,8 +133,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void buttonClickAction(View view) {
-        switch (view.getId()) {
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
             case R.id.number_0:
             case R.id.number_1:
             case R.id.number_2:
@@ -140,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.number_8:
             case R.id.number_9:
                 // get the integer value of the number
-                int value = Integer.valueOf(((Button) view).getText().toString());
+                int value = Integer.valueOf(((Button) v).getText().toString());
                 inputHandler.numberPressed(value);
                 break;
             case R.id.divide:

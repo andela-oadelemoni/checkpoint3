@@ -241,4 +241,8 @@ public class InputHandler {
         if (this.firstNumber % 1 == 0) return display.split(Pattern.quote("."))[0];
         else return display;
     }
+
+    public Number getBaseValue() {
+        return firstNumber;
+    }
 }
