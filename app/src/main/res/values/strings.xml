@@ -43,6 +43,9 @@
     <string name="new_zealand_dollar">NZD</string>
     <string name="nigerian_dollar">NGN</string>
     <string name="currency_image">Currency Image</string>
+    <string name="arithmetic_error">Arithmetic Error!</string>
+    <string name="infinity_error">Infinity</string>
+    <string name="nan_error">NaN</string>
     <!-- as string array -->
     <string-array name="currency_list">
         <item>@string/us_dollar</item>

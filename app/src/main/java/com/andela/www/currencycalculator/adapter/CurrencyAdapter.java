@@ -1,4 +1,4 @@
-package com.andela.www.currencycalculator;
+package com.andela.www.currencycalculator.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,7 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.andela.www.currencycalculator.model.CurrencyModel;
+import com.andela.www.currencycalculator.R;
+
 import java.util.List;
 
 /**
