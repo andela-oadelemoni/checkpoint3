@@ -96,46 +96,25 @@ public class InputHandler {
 
     public void additionPressed() {
 
-        if (operand != ArithmeticOperand.EQUAL && operand != ArithmeticOperand.ADD) {
-            performCalculation();
-        }
-        else if (firstNumber == 0 && isFirstOperation) firstNumber = initialInput;
-        else if (!currentInput.equals("")) firstNumber += initialInput;
-        setOperand(ArithmeticOperand.ADD);
+        operandOperation(ArithmeticOperand.ADD);
         cleanUpOperation();
-        //calculator.setFirstNumber(initialInput);
     }
 
     public void subtractionPressed() {
 
-        if (operand != ArithmeticOperand.EQUAL && operand != ArithmeticOperand.SUBTRACT) {
-            performCalculation();
-        }
-        else if (firstNumber == 0 && isFirstOperation) firstNumber = initialInput;
-        else if (!currentInput.equals("")) firstNumber -= initialInput;
-        setOperand(ArithmeticOperand.SUBTRACT);
+        operandOperation(ArithmeticOperand.SUBTRACT);
         cleanUpOperation();
     }
 
     public void multiplicationPressed() {
 
-        if (operand != ArithmeticOperand.EQUAL && operand != ArithmeticOperand.MULTIPLY) {
-            performCalculation();
-        }
-        else if (firstNumber == 0 && isFirstOperation) firstNumber = initialInput;
-        else if (!currentInput.equals("")) firstNumber *= initialInput;
-        setOperand(ArithmeticOperand.MULTIPLY);
+        operandOperation(ArithmeticOperand.MULTIPLY);
         cleanUpOperation();
     }
 
     public void divisionPressed() {
 
-        if (operand != ArithmeticOperand.EQUAL && operand != ArithmeticOperand.DIVIDE) {
-            performCalculation();
-        }
-        else if (firstNumber == 0 && isFirstOperation) firstNumber = initialInput;
-        else if (!currentInput.equals("")) firstNumber /= initialInput;
-        setOperand(ArithmeticOperand.DIVIDE);
+        operandOperation(ArithmeticOperand.DIVIDE);
         cleanUpOperation();
     }
 
@@ -144,6 +123,16 @@ public class InputHandler {
         cleanUpOperation();
         clearMiniDisplay();
         setOperand(ArithmeticOperand.EQUAL);
+    }
+
+    private void operandOperation(ArithmeticOperand operand) {
+        if ((this.operand != ArithmeticOperand.EQUAL && this.operand != operand)
+                || (!currentInput.equals("") && !isFirstOperation)) {
+            performCalculation();
+        }
+        else if (firstNumber == 0 && isFirstOperation) firstNumber = initialInput;
+
+        setOperand(operand);
     }
 
     private void cleanUpOperation() {
