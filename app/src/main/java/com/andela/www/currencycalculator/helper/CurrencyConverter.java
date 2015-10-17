@@ -18,10 +18,8 @@ public class CurrencyConverter {
 
     public static final String CONVERSION_URL = "https://openexchangerates.org/api/latest.json?app_id=6b8d176d6e1741af8a8028ed6c17d51d";
     private JSONObject rates;
-    private String baseCurrency;
     private double currency;
     private RequestQueue requestQueue;
-    private String conversion;
 
     public CurrencyConverter(Context context) {
         requestQueue = Volley.newRequestQueue(context);
