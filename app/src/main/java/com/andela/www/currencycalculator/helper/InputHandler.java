@@ -2,7 +2,6 @@ package com.andela.www.currencycalculator.helper;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.TextView;
 import com.andela.www.currencycalculator.utility.ArithmeticOperand;
 import com.andela.www.currencycalculator.utility.Calculator;
