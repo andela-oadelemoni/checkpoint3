@@ -1,7 +1,6 @@
 package com.andela.www.currencycalculator.model;
 
 import com.andela.www.currencycalculator.R;
-
 import java.util.ArrayList;
 import java.util.List;
 

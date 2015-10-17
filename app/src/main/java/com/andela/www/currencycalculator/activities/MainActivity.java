@@ -11,13 +11,11 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.andela.www.currencycalculator.helper.CurrencyConverter;
 import com.andela.www.currencycalculator.helper.InputHandler;
 import com.andela.www.currencycalculator.adapter.CurrencyAdapter;
 import com.andela.www.currencycalculator.model.Currency;
 import com.andela.www.currencycalculator.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
