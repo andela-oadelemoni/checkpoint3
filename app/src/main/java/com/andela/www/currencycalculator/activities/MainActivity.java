@@ -11,13 +11,11 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.andela.www.currencycalculator.helper.CurrencyConverter;
 import com.andela.www.currencycalculator.helper.InputHandler;
 import com.andela.www.currencycalculator.adapter.CurrencyAdapter;
 import com.andela.www.currencycalculator.model.Currency;
 import com.andela.www.currencycalculator.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private InputHandler inputHandler;
     private CurrencyConverter converter;
     private String activePosition = "USD";
+    private String baseCurrency = "USD";
 
     private TextView destinationCurrency;
     private float baseValue;
@@ -57,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String[] currencyList = getResources().getStringArray(R.array.currency_list);
         currencyValues = Currency.getCurrencies(currencyList);
 
-        Spinner startingCurrency = (Spinner) findViewById(R.id.starting_currency_picker);
+        final Spinner startingCurrency = (Spinner) findViewById(R.id.starting_currency_picker);
         final Spinner destinationCurrency = (Spinner) findViewById(R.id.destination_currency_picker);
         CurrencyAdapter currencyAdapter = new CurrencyAdapter(this, R.layout.spinner_rows, currencyValues, getResources());
 
@@ -77,6 +76,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
+        startingCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Currency currency = (Currency) startingCurrency.getItemAtPosition(position);
+                baseCurrency = currency.getCurrencyName();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
         // conversion button
         Button conversionButton = (Button) findViewById(R.id.conversionButton);
         conversionButton.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void doConversion() {
         float baseValue = updateBaseValue();
-        converter.convertCurrency(baseValue, activePosition, new CurrencyConverter.ConfirmationCallback() {
+        converter.convertCurrency(baseCurrency, baseValue, activePosition, new CurrencyConverter.ConfirmationCallback() {
             @Override
             public void onSuccess(String currency) {
                 Toast.makeText(MainActivity.this, "Conversion is " + currency, Toast.LENGTH_LONG).show();
