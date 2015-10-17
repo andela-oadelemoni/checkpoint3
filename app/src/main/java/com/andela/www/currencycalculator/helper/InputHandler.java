@@ -20,7 +20,7 @@ public class InputHandler {
     private TextView screen;
     private TextView mini_screen;
     // input values
-    private float firstNumber = 0;
+    private float calculationResult = 0;
     private float initialInput = 0;
     private String inputHistory = "";
     private String currentInput = "";
@@ -66,7 +66,7 @@ public class InputHandler {
     }
 
     public void clearPressed() {
-        firstNumber = 0;
+        calculationResult = 0;
         initialInput = 0;
         currentInput = "";
         inputHistory = "";
@@ -96,46 +96,25 @@ public class InputHandler {
 
     public void additionPressed() {
 
-        if (operand != ArithmeticOperand.EQUAL && operand != ArithmeticOperand.ADD) {
-            performCalculation();
-        }
-        else if (firstNumber == 0 && isFirstOperation) firstNumber = initialInput;
-        else if (!currentInput.equals("")) firstNumber += initialInput;
-        setOperand(ArithmeticOperand.ADD);
+        operandOperation(ArithmeticOperand.ADD);
         cleanUpOperation();
-        //calculator.setFirstNumber(initialInput);
     }
 
     public void subtractionPressed() {
 
-        if (operand != ArithmeticOperand.EQUAL && operand != ArithmeticOperand.SUBTRACT) {
-            performCalculation();
-        }
-        else if (firstNumber == 0 && isFirstOperation) firstNumber = initialInput;
-        else if (!currentInput.equals("")) firstNumber -= initialInput;
-        setOperand(ArithmeticOperand.SUBTRACT);
+        operandOperation(ArithmeticOperand.SUBTRACT);
         cleanUpOperation();
     }
 
     public void multiplicationPressed() {
 
-        if (operand != ArithmeticOperand.EQUAL && operand != ArithmeticOperand.MULTIPLY) {
-            performCalculation();
-        }
-        else if (firstNumber == 0 && isFirstOperation) firstNumber = initialInput;
-        else if (!currentInput.equals("")) firstNumber *= initialInput;
-        setOperand(ArithmeticOperand.MULTIPLY);
+        operandOperation(ArithmeticOperand.MULTIPLY);
         cleanUpOperation();
     }
 
     public void divisionPressed() {
 
-        if (operand != ArithmeticOperand.EQUAL && operand != ArithmeticOperand.DIVIDE) {
-            performCalculation();
-        }
-        else if (firstNumber == 0 && isFirstOperation) firstNumber = initialInput;
-        else if (!currentInput.equals("")) firstNumber /= initialInput;
-        setOperand(ArithmeticOperand.DIVIDE);
+        operandOperation(ArithmeticOperand.DIVIDE);
         cleanUpOperation();
     }
 
@@ -143,7 +122,18 @@ public class InputHandler {
         performCalculation();
         cleanUpOperation();
         clearMiniDisplay();
+        isFirstOperation = true;
         setOperand(ArithmeticOperand.EQUAL);
+    }
+
+    private void operandOperation(ArithmeticOperand operand) {
+        if ((this.operand != ArithmeticOperand.EQUAL && this.operand != operand)
+                || (!currentInput.equals("") && !isFirstOperation)) {
+            performCalculation();
+        }
+        else if (isFirstOperation) calculationResult = initialInput;
+
+        setOperand(operand);
     }
 
     private void cleanUpOperation() {
@@ -159,9 +149,9 @@ public class InputHandler {
     private void performCalculation() {
         if (!currentInput.equals("") && operand != ArithmeticOperand.EQUAL) {
             calculator.setOperand(operand);
-            calculator.setFirstNumber(firstNumber);
+            calculator.setFirstNumber(calculationResult);
             calculator.setSecondNumber(initialInput);
-            firstNumber = calculator.calculate();
+            calculationResult = calculator.calculate();
         }
     }
 
@@ -196,10 +186,10 @@ public class InputHandler {
     }
 
     private String processScreenDisplay() {
-        // convert firstNumber to string
-        String display = firstNumber+"";
+        // convert calculationResult to string
+        String display = calculationResult +"";
         // check if initialInput is integer
-        if (this.firstNumber % 1 == 0) return display.split(Pattern.quote("."))[0];
+        if (this.calculationResult % 1 == 0) return display.split(Pattern.quote("."))[0];
         else return display;
     }
 
@@ -234,14 +224,14 @@ public class InputHandler {
     }
 
     private String processMiniScreenDisplay() {
-        // convert firstNumber to string
-        String display = String.valueOf(firstNumber);
+        // convert calculationResult to string
+        String display = String.valueOf(calculationResult);
         // check if initialInput is integer
-        if (this.firstNumber % 1 == 0) return display.split(Pattern.quote("."))[0];
+        if (this.calculationResult % 1 == 0) return display.split(Pattern.quote("."))[0];
         else return display;
     }
 
     public Number getBaseValue() {
-        return firstNumber;
+        return calculationResult;
     }
 }
