@@ -26,12 +26,12 @@ public class InputHandler {
     private String currentInput = "";
     // history stack
     private Stack<String> backHistory = new Stack<>();
-    private ArrayDeque<String> computationHistory = new ArrayDeque<>();
     // decimal notifier
     private boolean dotPressed = false;
     private boolean isFirstOperation = true;
     // calculator screen
     private Calculator calculator = new Calculator();
+    private CalculationHistory calculationHistory = new CalculationHistory();
     // active operand
     private ArithmeticOperand operand = ArithmeticOperand.EQUAL;
 
@@ -71,7 +71,7 @@ public class InputHandler {
         currentInput = "";
         inputHistory = "";
         backHistory.clear();
-        computationHistory.clear();
+        calculationHistory.resetHistory();
         setDotUnpressed();
         clearMiniDisplay();
         operand = ArithmeticOperand.EQUAL;
@@ -131,7 +131,10 @@ public class InputHandler {
                 || (!currentInput.equals("") && !isFirstOperation)) {
             performCalculation();
         }
-        else if (isFirstOperation) calculationResult = initialInput;
+        else if (isFirstOperation) {
+            calculationResult = initialInput;
+            calculationHistory.pushHistory(String.valueOf(calculationResult));
+        }
 
         setOperand(operand);
     }
@@ -152,6 +155,7 @@ public class InputHandler {
             calculator.setFirstNumber(calculationResult);
             calculator.setSecondNumber(initialInput);
             calculationResult = calculator.calculate();
+            calculationHistory.pushHistory(String.valueOf(initialInput), operand);
         }
     }
 
@@ -197,7 +201,8 @@ public class InputHandler {
         String operandString = getOperandString();
         String display_number = processMiniScreenDisplay();
         String finalDisplay = display_number + operandString;
-        mini_screen.setText(finalDisplay);
+        String display = calculationHistory.getHistory() + operandString;
+        mini_screen.setText(display);
     }
 
     private String getOperandString() {
