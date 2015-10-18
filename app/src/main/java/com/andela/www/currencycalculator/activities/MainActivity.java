@@ -16,6 +16,8 @@ import com.andela.www.currencycalculator.helper.InputHandler;
 import com.andela.www.currencycalculator.adapter.CurrencyAdapter;
 import com.andela.www.currencycalculator.model.Currency;
 import com.andela.www.currencycalculator.R;
+import com.andela.www.currencycalculator.utility.ArithmeticOperand;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -160,16 +162,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 inputHandler.numberPressed(value);
                 break;
             case R.id.divide:
-                inputHandler.divisionPressed();
-                break;
             case R.id.multiply:
-                inputHandler.multiplicationPressed();
-                break;
             case R.id.add:
-                inputHandler.additionPressed();
-                break;
             case R.id.subtract:
-                inputHandler.subtractionPressed();
+                ArithmeticOperand operand = getOperand(v.getId());
+                inputHandler.operandPressed(operand);
                 break;
             case R.id.clear:
                 inputHandler.clearPressed();
@@ -184,5 +181,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 inputHandler.decimalPressed();
                 break;
         }
+    }
+
+    private ArithmeticOperand getOperand(int id) {
+        switch (id) {
+            case R.id.divide:
+                return ArithmeticOperand.DIVIDE;
+            case R.id.multiply:
+                return ArithmeticOperand.MULTIPLY;
+            case R.id.add:
+                return ArithmeticOperand.ADD;
+            case R.id.subtract:
+                return ArithmeticOperand.SUBTRACT;
+        }
+        return ArithmeticOperand.EQUAL;
     }
 }
