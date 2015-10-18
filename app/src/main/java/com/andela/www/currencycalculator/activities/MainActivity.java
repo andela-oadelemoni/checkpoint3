@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String baseCurrency = "USD";
 
     private TextView destinationCurrency;
-    private float baseValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Currency currency = (Currency) startingCurrency.getItemAtPosition(position);
                 baseCurrency = currency.getCurrencyName();
+                inputHandler.setBaseCurrency(baseCurrency);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
