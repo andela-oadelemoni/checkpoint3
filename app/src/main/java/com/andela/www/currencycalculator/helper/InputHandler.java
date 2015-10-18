@@ -3,6 +3,7 @@ package com.andela.www.currencycalculator.helper;
 
 import android.content.Context;
 import android.widget.TextView;
+import com.andela.www.currencycalculator.R;
 import com.andela.www.currencycalculator.utility.ArithmeticOperand;
 import com.andela.www.currencycalculator.utility.Calculator;
 import java.util.Stack;
@@ -96,7 +97,8 @@ public class InputHandler {
             clearPressed();
     }
 
-    public void operandPressed(ArithmeticOperand operand) {
+    public void operandPressed(int operandId) {
+        ArithmeticOperand operand = getOperand(operandId);
         operandOperation(operand);
         cleanUpOperation();
     }
@@ -218,5 +220,19 @@ public class InputHandler {
 
     public Number getBaseValue() {
         return calculationResult;
+    }
+
+    private ArithmeticOperand getOperand(int id) {
+        switch (id) {
+            case R.id.divide:
+                return ArithmeticOperand.DIVIDE;
+            case R.id.multiply:
+                return ArithmeticOperand.MULTIPLY;
+            case R.id.add:
+                return ArithmeticOperand.ADD;
+            case R.id.subtract:
+                return ArithmeticOperand.SUBTRACT;
+        }
+        return ArithmeticOperand.EQUAL;
     }
 }

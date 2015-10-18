@@ -165,8 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.multiply:
             case R.id.add:
             case R.id.subtract:
-                ArithmeticOperand operand = getOperand(v.getId());
-                inputHandler.operandPressed(operand);
+                inputHandler.operandPressed(v.getId());
                 break;
             case R.id.clear:
                 inputHandler.clearPressed();
@@ -181,19 +180,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 inputHandler.decimalPressed();
                 break;
         }
-    }
-
-    private ArithmeticOperand getOperand(int id) {
-        switch (id) {
-            case R.id.divide:
-                return ArithmeticOperand.DIVIDE;
-            case R.id.multiply:
-                return ArithmeticOperand.MULTIPLY;
-            case R.id.add:
-                return ArithmeticOperand.ADD;
-            case R.id.subtract:
-                return ArithmeticOperand.SUBTRACT;
-        }
-        return ArithmeticOperand.EQUAL;
     }
 }
