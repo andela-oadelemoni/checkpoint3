@@ -96,42 +96,27 @@ public class InputHandler {
             clearPressed();
     }
 
-    public void additionPressed() {
-
-        operandOperation(ArithmeticOperand.ADD);
-        cleanUpOperation();
-    }
-
-    public void subtractionPressed() {
-
-        operandOperation(ArithmeticOperand.SUBTRACT);
-        cleanUpOperation();
-    }
-
-    public void multiplicationPressed() {
-
-        operandOperation(ArithmeticOperand.MULTIPLY);
-        cleanUpOperation();
-    }
-
-    public void divisionPressed() {
-
-        operandOperation(ArithmeticOperand.DIVIDE);
+    public void operandPressed(ArithmeticOperand operand) {
+        operandOperation(operand);
         cleanUpOperation();
     }
 
     public void equalPressed() {
         performCalculation();
-        cleanUpOperation();
-        clearMiniDisplay();
-        isFirstOperation = true;
         setOperand(ArithmeticOperand.EQUAL);
+        cleanUpOperation();
+        isFirstOperation = true;
+        calculationHistory.resetHistory();
     }
 
     private void operandOperation(ArithmeticOperand operand) {
         if ((this.operand != ArithmeticOperand.EQUAL && this.operand != operand)
                 || (!currentInput.equals("") && !isFirstOperation)) {
             performCalculation();
+        }
+        else if (currentInput.equals("") && isFirstOperation) {
+            String history = baseCurrency + " " + String.valueOf(calculationResult);
+            calculationHistory.pushHistory(history);
         }
         else if (isFirstOperation) {
             calculationResult = initialInput;
