@@ -5,7 +5,6 @@ import android.content.Context;
 import android.widget.TextView;
 import com.andela.www.currencycalculator.utility.ArithmeticOperand;
 import com.andela.www.currencycalculator.utility.Calculator;
-import java.util.ArrayDeque;
 import java.util.Stack;
 import java.util.regex.Pattern;
 
@@ -16,13 +15,13 @@ public class InputHandler {
 
     // context
     private Context context;
+    private String baseCurrency = "USD";
     // screen
     private TextView screen;
     private TextView mini_screen;
     // input values
     private float calculationResult = 0;
     private float initialInput = 0;
-    private String inputHistory = "";
     private String currentInput = "";
     // history stack
     private Stack<String> backHistory = new Stack<>();
@@ -54,6 +53,10 @@ public class InputHandler {
         setDisplay();
     }
 
+    public void setBaseCurrency(String baseCurrency) {
+        this.baseCurrency = baseCurrency;
+    }
+
     public void decimalPressed() {
         if (!dotPressed) {
             if (currentInput.equals("0")) currentInput = "0.";
@@ -69,7 +72,6 @@ public class InputHandler {
         calculationResult = 0;
         initialInput = 0;
         currentInput = "";
-        inputHistory = "";
         backHistory.clear();
         calculationHistory.resetHistory();
         setDotUnpressed();
@@ -133,7 +135,8 @@ public class InputHandler {
         }
         else if (isFirstOperation) {
             calculationResult = initialInput;
-            calculationHistory.pushHistory(String.valueOf(calculationResult));
+            String history = baseCurrency + " " + String.valueOf(calculationResult);
+            calculationHistory.pushHistory(history);
         }
 
         setOperand(operand);
@@ -155,7 +158,9 @@ public class InputHandler {
             calculator.setFirstNumber(calculationResult);
             calculator.setSecondNumber(initialInput);
             calculationResult = calculator.calculate();
-            calculationHistory.pushHistory(String.valueOf(initialInput), operand);
+
+            String history = baseCurrency + " " + String.valueOf(initialInput);
+            calculationHistory.pushHistory(history, operand);
         }
     }
 
@@ -199,8 +204,6 @@ public class InputHandler {
 
     private void setMiniDisplay() {
         String operandString = getOperandString();
-        String display_number = processMiniScreenDisplay();
-        String finalDisplay = display_number + operandString;
         String display = calculationHistory.getHistory() + operandString;
         mini_screen.setText(display);
     }
@@ -226,14 +229,6 @@ public class InputHandler {
 
     private void clearMiniDisplay() {
         mini_screen.setText("");
-    }
-
-    private String processMiniScreenDisplay() {
-        // convert calculationResult to string
-        String display = String.valueOf(calculationResult);
-        // check if initialInput is integer
-        if (this.calculationResult % 1 == 0) return display.split(Pattern.quote("."))[0];
-        else return display;
     }
 
     public Number getBaseValue() {
