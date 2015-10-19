@@ -1,32 +1,28 @@
 package com.andela.www.currencycalculator.utility;
 
 import com.andela.www.currencycalculator.helper.CalculationHistory;
-
 import java.util.Stack;
-import java.util.regex.Pattern;
 
 /**
  * Created by kamiye on 10/14/15.
  */
 public class Calculator {
 
-    private float previousResult = 0;
-    private float result;
-    private float firstNumber;
+    private float calculationResult = 0;
+    private float firstNumber = 0;
     private boolean isFirstOperation = true;
-    private float secondNumber;
+    private float secondNumber = 0;
+
+    private String baseCurrency = "USD";
     private ArithmeticOperand operand = ArithmeticOperand.EQUAL;
-    private Stack<Float> historyStack = new Stack<>();
     private Stack<Float> calculationStack = new Stack<>();
     private CalculationHistory history = new CalculationHistory();
-    private boolean resultIsInt = false;
 
-    /* SET FIRST NUMBER */
-    public void setFirstNumber(float firstNumber) {
+    private void setFirstNumber(float firstNumber) {
         this.firstNumber = firstNumber;
     }
 
-    public void setSecondNumber(float secondNumber) {
+    private void setSecondNumber(float secondNumber) {
         this.secondNumber = secondNumber;
     }
 
@@ -36,9 +32,7 @@ public class Calculator {
 
     /* CALCULATION METHODS */
 
-    /* ACTION METHODS */
-
-    public float calculate() {
+    public void calculate() {
         setNumbers();
         switch (operand) {
             case ADD:
@@ -54,44 +48,34 @@ public class Calculator {
                 divide();
                 break;
         }
-        processResult(previousResult);
-        historyStack.push(previousResult);
-        if (resultIsInt) {
-            resultIsInt = false;
-            return (int) previousResult;
-        }
-        else return previousResult;
     }
 
     public void resetCalculator() {
         history.resetHistory();
         operand = ArithmeticOperand.EQUAL;
-        previousResult = 0;
+        calculationResult = 0;
+        isFirstOperation = true;
         calculationStack.clear();
-    }
-
-    public float getHistory() {
-        return historyStack.pop();
     }
 
     // Addition method
     private void add() throws ArithmeticException {
-        previousResult = firstNumber + secondNumber;
+        calculationResult = firstNumber + secondNumber;
     }
 
     // Subtraction method
     private void subtract() throws ArithmeticException {
-        previousResult = firstNumber - secondNumber;
+        calculationResult = firstNumber - secondNumber;
     }
 
     // Multiplication method
     private void multiply() throws ArithmeticException {
-        previousResult = firstNumber * secondNumber;
+        calculationResult = firstNumber * secondNumber;
     }
 
     // Divide method
     private void divide() throws ArithmeticException {
-        previousResult = firstNumber / secondNumber;
+        calculationResult = firstNumber / secondNumber;
     }
 
     private void setNumbers() {
@@ -101,27 +85,68 @@ public class Calculator {
         }
     }
 
-    private void processResult(float result) {
-        String floatToString = result+"";
-        String[] array = floatToString.split(Pattern.quote("."));
-        if (Integer.valueOf(array[1]) == 0) resultIsInt = true;
+    public void resetOperation() {
+        isFirstOperation = false;
     }
 
-    /*private void operandOperation(ArithmeticOperand operand) {
+    public float getCalculatorResult() {
+        return calculationResult;
+    }
+
+    public void setNewOperation() {
+        isFirstOperation = true;
+        history.resetHistory();
+    }
+
+    public void operandOperation(float initialInput, ArithmeticOperand operand) {
         if ((this.operand != ArithmeticOperand.EQUAL && this.operand != operand)
-                || (!currentInput.equals("") && !isFirstOperation)) {
-            performCalculation();
+                || (initialInput != 0 && !isFirstOperation)) {
+            performCalculation(initialInput);
         }
-        else if (currentInput.equals("") && isFirstOperation) {
+        else if (initialInput == 0 && isFirstOperation) {
             String history = baseCurrency + " " + String.valueOf(calculationResult);
-            calculationHistory.pushHistory(history);
+            this.history.pushHistory(history);
         }
         else if (isFirstOperation) {
             calculationResult = initialInput;
             String history = baseCurrency + " " + String.valueOf(calculationResult);
-            calculationHistory.pushHistory(history);
+            this.history.pushHistory(history);
         }
 
         setOperand(operand);
-    }*/
+    }
+
+    public void performCalculation(float initialInput) {
+        if (initialInput != 0 && operand != ArithmeticOperand.EQUAL) {
+            setFirstNumber(calculationResult);
+            setSecondNumber(initialInput);
+            calculate();
+
+            String history = baseCurrency + " " + String.valueOf(initialInput);
+            this.history.pushHistory(history, operand);
+        }
+    }
+
+    public String getCalculationHistory() {
+        return history.getHistory();
+    }
+
+    public String getOperandString() {
+        String operandString = "";
+        switch (operand) {
+            case ADD:
+                operandString = " + ";
+                break;
+            case SUBTRACT:
+                operandString = " - ";
+                break;
+            case MULTIPLY:
+                operandString = " x ";
+                break;
+            case DIVIDE:
+                operandString = " / ";
+                break;
+        }
+        return operandString;
+    }
 }
