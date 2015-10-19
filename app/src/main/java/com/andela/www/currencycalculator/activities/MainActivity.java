@@ -16,21 +16,20 @@ import com.andela.www.currencycalculator.helper.InputHandler;
 import com.andela.www.currencycalculator.adapter.CurrencyAdapter;
 import com.andela.www.currencycalculator.model.Currency;
 import com.andela.www.currencycalculator.R;
-import com.andela.www.currencycalculator.utility.ArithmeticOperand;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     public List<Currency> currencyValues = new ArrayList<>();
     // Input helper
     private InputHandler inputHandler;
-    private CurrencyConverter converter;
     private String activePosition = "USD";
     private String baseCurrency = "USD";
 
-    private TextView destinationCurrency;
+    private TextView convertingCurrency;
+    private Spinner convertingCurrencySelector;
+    private Spinner startingCurrency;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TextView mini_screen = (TextView) findViewById(R.id.mini_screen);
 
         // currency display screens
-        destinationCurrency = (TextView) findViewById(R.id.destination_currency);
+        convertingCurrency = (TextView) findViewById(R.id.destination_currency);
 
         // set input helper
         inputHandler = new InputHandler(this, calculator_screen, mini_screen);
@@ -57,63 +56,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String[] currencyList = getResources().getStringArray(R.array.currency_list);
         currencyValues = Currency.getCurrencies(currencyList);
 
-        final Spinner startingCurrency = (Spinner) findViewById(R.id.starting_currency_picker);
-        final Spinner destinationCurrency = (Spinner) findViewById(R.id.destination_currency_picker);
+        startingCurrency = (Spinner) findViewById(R.id.starting_currency_picker);
+        convertingCurrencySelector = (Spinner) findViewById(R.id.destination_currency_picker);
+
+        // define adapters for spinners
         CurrencyAdapter currencyAdapter = new CurrencyAdapter(this, R.layout.spinner_rows, currencyValues, getResources());
 
         startingCurrency.setAdapter(currencyAdapter);
-        destinationCurrency.setAdapter(currencyAdapter);
+        convertingCurrencySelector.setAdapter(currencyAdapter);
 
-        converter = new CurrencyConverter(MainActivity.this);
 
-        destinationCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Currency currency = (Currency) destinationCurrency.getItemAtPosition(position);
-                activePosition = currency.getCurrencyName();
-                doConversion();
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
-
-        startingCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Currency currency = (Currency) startingCurrency.getItemAtPosition(position);
-                baseCurrency = currency.getCurrencyName();
-                inputHandler.setBaseCurrency(baseCurrency);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
+        convertingCurrencySelector.setOnItemSelectedListener(this);
+        startingCurrency.setOnItemSelectedListener(this);
 
         // conversion button
         Button conversionButton = (Button) findViewById(R.id.conversionButton);
-        conversionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Currency currency = (Currency) destinationCurrency.getSelectedItem();
-                activePosition = currency.getCurrencyName();
-                doConversion();
-            }
-        });
-    }
-
-    private void doConversion() {
-        float baseValue = updateBaseValue();
-        converter.convertCurrency(baseCurrency, baseValue, activePosition, new CurrencyConverter.ConfirmationCallback() {
-            @Override
-            public void onSuccess(String currency) {
-                Toast.makeText(MainActivity.this, "Conversion is " + currency, Toast.LENGTH_LONG).show();
-                destinationCurrency.setText(currency);
-            }
-
-            @Override
-            public void onFailure() {
-                Toast.makeText(MainActivity.this, "Conversion failed!!!!", Toast.LENGTH_LONG).show();
-            }
-        });
+        conversionButton.setOnClickListener(this);
     }
 
     private float updateBaseValue() {
@@ -179,6 +137,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.decimal:
                 inputHandler.decimalPressed();
                 break;
+            case R.id.conversionButton:
+                Currency currency = (Currency) convertingCurrencySelector.getSelectedItem();
+                activePosition = currency.getCurrencyName();
+                updateCurrencyResult();
+                break;
         }
     }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Currency currency = (Currency) parent.getItemAtPosition(position);
+        if (parent.getId() == R.id.destination_currency_picker) {
+            activePosition = currency.getCurrencyName();
+            inputHandler.setTargetCurrency(activePosition);
+            //updateCurrencyResult();
+        }
+        else {
+            baseCurrency = currency.getCurrencyName();
+            inputHandler.setBaseCurrency(baseCurrency);
+        }
+    }
+
+    private void updateCurrencyResult() {
+        double currency = (double) inputHandler.getEquivalentValue();
+        convertingCurrency.setText(String.valueOf(currency));
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {}
 }

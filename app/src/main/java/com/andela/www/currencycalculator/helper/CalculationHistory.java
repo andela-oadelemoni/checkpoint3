@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 public class CalculationHistory {
 
     private ArrayDeque<String> calculationHistory = new ArrayDeque<>();
-    private ArrayDeque<String> baseCurrencyHistory = new ArrayDeque<>();
 
     public void pushHistory(String string, ArithmeticOperand... operand) {
         String operandString = "";

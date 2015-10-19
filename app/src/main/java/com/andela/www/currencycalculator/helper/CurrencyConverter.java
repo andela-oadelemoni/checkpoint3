@@ -35,7 +35,7 @@ public class CurrencyConverter {
                     rates = response.getJSONObject("rates");
                     currency = rates.getDouble(convertedCurrency) * baseCurrencyValue;
                     if (!baseCurrency.equals("USD")) currency = calculateBaseCurency(baseCurrency, currency);
-                    callback.onSuccess(String.valueOf(currency));
+                    callback.onSuccess(currency);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     callback.onFailure();
@@ -65,9 +65,40 @@ public class CurrencyConverter {
         else return 0;
     }
 
-    public interface ConfirmationCallback {
-        void onSuccess(String currency);
+    public void getRates(final RatesCallback callback) {
+        JsonObjectRequest conversionRequest = new JsonObjectRequest(Request.Method.GET,
+                CONVERSION_URL, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    rates = response.getJSONObject("rates");
+                    callback.onSuccess(rates);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    callback.onFailure();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error request", error.toString());
+                // set error message to the user
+                callback.onFailure();
+                requestQueue.stop();
+            }
+        });
 
+        requestQueue.add(conversionRequest);
+    }
+
+    public interface ConfirmationCallback {
+        void onSuccess(double currency);
+
+        void onFailure();
+    }
+
+    public interface RatesCallback {
+        void onSuccess(JSONObject rates);
         void onFailure();
     }
 }
