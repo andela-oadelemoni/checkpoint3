@@ -48,13 +48,11 @@ public class Calculator {
 
     private void setFirstNumber(float firstNumber, String baseCurrency) {
         firstNumberInUSD = convertToUSD(firstNumber, baseCurrency);
-        Log.i("FirstBaseCurrency", baseCurrency);
         this.firstNumber = firstNumber;
     }
 
     private void setSecondNumber(float secondNumber, String baseCurrency) {
         secondNumberInUSD = convertToUSD(secondNumber, baseCurrency);
-        Log.i("SecondBaseCurrency", baseCurrency);
         this.secondNumber = secondNumber;
     }
 
@@ -138,10 +136,6 @@ public class Calculator {
         return calculationResult;
     }
 
-    public double getResultInUSD() {
-        return resultInUSD;
-    }
-
     public void setNewOperation() {
         isFirstOperation = true;
         history.resetHistory();
@@ -151,17 +145,14 @@ public class Calculator {
         if ((this.operand != ArithmeticOperand.EQUAL && this.operand != operand)
                 || (initialInput != 0 && !isFirstOperation)) {
             performCalculation(initialInput);
-            Log.i("BaseCurrency1", baseCurrency);
         }
         else if (initialInput == 0 && isFirstOperation) {
             String history = baseCurrency + " " + String.valueOf(calculationResult);
             this.history.pushHistory(history);
-            Log.i("BaseCurrency2", baseCurrency);
         }
         else if (isFirstOperation) {
             calculationResult = initialInput;
             resultInUSD = convertToUSD(initialInput, baseCurrency);
-            Log.i("BaseCurrency3", baseCurrency);
             String history = baseCurrency + " " + String.valueOf(calculationResult);
             this.history.pushHistory(history);
         }
