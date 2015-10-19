@@ -47,6 +47,7 @@
     <string name="infinity_error">Infinity</string>
     <string name="nan_error">NaN</string>
     <string name="convert_text">Convert</string>
+    <string name="top_ten">Top Ten</string>
     <!-- as string array -->
     <string-array name="currency_list">
         <item>@string/us_dollar</item>

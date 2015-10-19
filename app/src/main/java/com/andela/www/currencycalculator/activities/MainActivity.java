@@ -10,8 +10,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-import com.andela.www.currencycalculator.helper.CurrencyConverter;
 import com.andela.www.currencycalculator.helper.InputHandler;
 import com.andela.www.currencycalculator.adapter.CurrencyAdapter;
 import com.andela.www.currencycalculator.model.Currency;
@@ -74,12 +72,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         conversionButton.setOnClickListener(this);
     }
 
-    private float updateBaseValue() {
-        float base = (float) inputHandler.getBaseValue();
-
-        return (base == 0) ? 1 : base;
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -127,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.clear:
                 inputHandler.clearPressed();
+                convertingCurrency.setText("");
                 break;
             case R.id.back:
                 inputHandler.backPressed();
@@ -151,7 +144,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (parent.getId() == R.id.destination_currency_picker) {
             activePosition = currency.getCurrencyName();
             inputHandler.setTargetCurrency(activePosition);
-            //updateCurrencyResult();
         }
         else {
             baseCurrency = currency.getCurrencyName();

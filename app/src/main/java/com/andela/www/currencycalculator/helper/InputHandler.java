@@ -15,8 +15,6 @@ import java.util.regex.Pattern;
 public class InputHandler {
 
     // context
-    private Context context;
-    private String baseCurrency = "USD";
     private String targetCurrency = "USD";
     // screen
     private TextView screen;
@@ -32,7 +30,6 @@ public class InputHandler {
     private Calculator calculator;
 
     public InputHandler(Context context, TextView screen, TextView mini_screen) {
-        this.context = context;
         this.screen = screen;
         this.mini_screen = mini_screen;
         calculator = new Calculator(context);
@@ -161,14 +158,6 @@ public class InputHandler {
 
     private void clearMiniDisplay() {
         mini_screen.setText("");
-    }
-
-    public Number getBaseValue() {
-        return calculator.getCalculatorResult();
-    }
-
-    public Number getTargetCurrencyInUSD() {
-        return calculator.getResultInUSD();
     }
 
     public Number getEquivalentValue() {
