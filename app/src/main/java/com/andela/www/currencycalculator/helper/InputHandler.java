@@ -17,6 +17,7 @@ public class InputHandler {
     // context
     private Context context;
     private String baseCurrency = "USD";
+    private String targetCurrency = "USD";
     // screen
     private TextView screen;
     private TextView mini_screen;
@@ -28,12 +29,13 @@ public class InputHandler {
     // decimal notifier
     private boolean dotPressed = false;
     // calculator screen
-    private Calculator calculator = new Calculator();
+    private Calculator calculator;
 
     public InputHandler(Context context, TextView screen, TextView mini_screen) {
         this.context = context;
         this.screen = screen;
         this.mini_screen = mini_screen;
+        calculator = new Calculator(context);
 
         // set default screen
         setDisplay();
@@ -50,7 +52,11 @@ public class InputHandler {
     }
 
     public void setBaseCurrency(String baseCurrency) {
-        this.baseCurrency = baseCurrency;
+        calculator.setBaseCurrency(baseCurrency);
+    }
+
+    public void setTargetCurrency(String targetCurrency) {
+        this.targetCurrency = targetCurrency;
     }
 
     public void decimalPressed() {
@@ -159,6 +165,14 @@ public class InputHandler {
 
     public Number getBaseValue() {
         return calculator.getCalculatorResult();
+    }
+
+    public Number getTargetCurrencyInUSD() {
+        return calculator.getResultInUSD();
+    }
+
+    public Number getEquivalentValue() {
+        return calculator.equivalentValue(targetCurrency);
     }
 
     private ArithmeticOperand getOperand(int id) {
