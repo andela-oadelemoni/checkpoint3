@@ -1,28 +1,58 @@
 package com.andela.www.currencycalculator.utility;
 
+import android.content.Context;
+import android.util.Log;
+import com.andela.www.currencycalculator.helper.CalculationHistory;
+import com.andela.www.currencycalculator.helper.CurrencyConverter;
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.util.Stack;
-import java.util.regex.Pattern;
 
 /**
  * Created by kamiye on 10/14/15.
  */
 public class Calculator {
 
-    private float previousResult = 0;
-    private float result;
-    private float firstNumber;
-    private float secondNumber;
-    private ArithmeticOperand operand;
-    private Stack<Float> historyStack = new Stack<>();
-    private Stack<Float> calculationStack = new Stack<>();
-    private boolean resultIsInt = false;
+    private float calculationResult = 0;
+    private boolean isFirstOperation = true;
+    private float firstNumber = 0;
+    private float secondNumber = 0;
 
-    /* SET FIRST NUMBER */
-    public void setFirstNumber(float firstNumber) {
+    private double firstNumberInUSD = 0;
+    private double secondNumberInUSD = 0;
+
+    private String baseCurrency = "USD";
+    private String firstBaseCurrency = "USD";
+    private ArithmeticOperand operand = ArithmeticOperand.EQUAL;
+    private Stack<Float> calculationStack = new Stack<>();
+    private CalculationHistory history = new CalculationHistory();
+
+    private CurrencyConverter converter;
+    private double resultInUSD;
+    private JSONObject currencyRates;
+
+    public Calculator(Context context) {
+        converter = new CurrencyConverter(context);
+        converter.getRates(new CurrencyConverter.RatesCallback() {
+            @Override
+            public void onSuccess(JSONObject rates) {
+                currencyRates = rates;
+            }
+
+            @Override
+            public void onFailure() {
+                Log.i("Rates Failure", "Failure getting rates");
+            }
+        });
+    }
+
+    private void setFirstNumber(float firstNumber, String baseCurrency) {
+        firstNumberInUSD = convertToUSD(firstNumber, baseCurrency);
         this.firstNumber = firstNumber;
     }
 
-    public void setSecondNumber(float secondNumber) {
+    private void setSecondNumber(float secondNumber, String baseCurrency) {
+        secondNumberInUSD = convertToUSD(secondNumber, baseCurrency);
         this.secondNumber = secondNumber;
     }
 
@@ -30,31 +60,14 @@ public class Calculator {
         this.operand = operand;
     }
 
+    public void setBaseCurrency(String currency) {
+        firstBaseCurrency = baseCurrency;
+        this.baseCurrency = currency;
+    }
+
     /* CALCULATION METHODS */
 
-    // Addition method
-    private void add() throws ArithmeticException {
-        previousResult = firstNumber + secondNumber;
-    }
-
-    // Subtraction method
-    private void subtract() throws ArithmeticException {
-        previousResult = firstNumber - secondNumber;
-    }
-
-    // Multiplication method
-    private void multiply() throws ArithmeticException {
-        previousResult = firstNumber * secondNumber;
-    }
-
-    // Divide method
-    private void divide() throws ArithmeticException {
-        previousResult = firstNumber / secondNumber;
-    }
-
-    /* ACTION METHODS */
-
-    public float calculate() {
+    public void calculate() {
         setNumbers();
         switch (operand) {
             case ADD:
@@ -70,34 +83,138 @@ public class Calculator {
                 divide();
                 break;
         }
-        processResult(previousResult);
-        historyStack.push(previousResult);
-        if (resultIsInt) {
-            resultIsInt = false;
-            return (int) previousResult;
-        }
-        else return previousResult;
+    }
+
+    public void resetCalculator() {
+        history.resetHistory();
+        operand = ArithmeticOperand.EQUAL;
+        calculationResult = 0;
+        resultInUSD = 0;
+        isFirstOperation = true;
+        calculationStack.clear();
+    }
+
+    // Addition method
+    private void add() throws ArithmeticException {
+        // do currency conversion of first and second number differently
+        resultInUSD = firstNumberInUSD + secondNumberInUSD;
+        calculationResult = firstNumber + secondNumber;
+    }
+
+    // Subtraction method
+    private void subtract() throws ArithmeticException {
+        resultInUSD = firstNumberInUSD - secondNumberInUSD;
+        calculationResult = firstNumber - secondNumber;
+    }
+
+    // Multiplication method
+    private void multiply() throws ArithmeticException {
+        resultInUSD = firstNumberInUSD * secondNumberInUSD;
+        calculationResult = firstNumber * secondNumber;
+    }
+
+    // Divide method
+    private void divide() throws ArithmeticException {
+        resultInUSD = firstNumberInUSD / secondNumberInUSD;
+        calculationResult = firstNumber / secondNumber;
     }
 
     private void setNumbers() {
         if (calculationStack.size() > 1) {
             secondNumber = calculationStack.pop();
             firstNumber = calculationStack.pop();
+            firstNumberInUSD = convertToUSD(firstNumber, baseCurrency);
+            secondNumberInUSD = convertToUSD(secondNumber, baseCurrency);
         }
     }
 
-    public void resetCalculator() {
-        previousResult = 0;
-        calculationStack.clear();
+    public void resetOperation() {
+        isFirstOperation = false;
     }
 
-    private void processResult(float result) {
-        String floatToString = result+"";
-        String[] array = floatToString.split(Pattern.quote("."));
-        if (Integer.valueOf(array[1]) == 0) resultIsInt = true;
+    public float getCalculatorResult() {
+        return calculationResult;
     }
 
-    public float getHistory() {
-        return historyStack.pop();
+    public double getResultInUSD() {
+        return resultInUSD;
+    }
+
+    public void setNewOperation() {
+        isFirstOperation = true;
+        history.resetHistory();
+    }
+
+    public void operandOperation(float initialInput, ArithmeticOperand operand) {
+        if ((this.operand != ArithmeticOperand.EQUAL && this.operand != operand)
+                || (initialInput != 0 && !isFirstOperation)) {
+            performCalculation(initialInput);
+        }
+        else if (initialInput == 0 && isFirstOperation) {
+            String history = baseCurrency + " " + String.valueOf(calculationResult);
+            this.history.pushHistory(history);
+        }
+        else if (isFirstOperation) {
+            calculationResult = initialInput;
+            resultInUSD = convertToUSD(initialInput, baseCurrency);
+            String history = baseCurrency + " " + String.valueOf(calculationResult);
+            this.history.pushHistory(history);
+        }
+
+        setOperand(operand);
+    }
+
+    public void performCalculation(float initialInput) {
+        if (initialInput != 0 && operand != ArithmeticOperand.EQUAL) {
+            setFirstNumber(calculationResult, firstBaseCurrency);
+            setSecondNumber(initialInput, baseCurrency);
+            calculate();
+
+            String history = baseCurrency + " " + String.valueOf(initialInput);
+            this.history.pushHistory(history, operand);
+        }
+    }
+
+    public String getCalculationHistory() {
+        return history.getHistory();
+    }
+
+    public String getOperandString() {
+        String operandString = "";
+        switch (operand) {
+            case ADD:
+                operandString = " + ";
+                break;
+            case SUBTRACT:
+                operandString = " - ";
+                break;
+            case MULTIPLY:
+                operandString = " x ";
+                break;
+            case DIVIDE:
+                operandString = " / ";
+                break;
+        }
+        return operandString;
+    }
+
+    private double convertToUSD (float targetValue, String targetCurrency) {
+        double USDValue = 0;
+        try {
+            USDValue = currencyRates.getDouble(targetCurrency);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return targetValue / USDValue;
+    }
+
+    public double equivalentValue(String targetCurrency) {
+        double targetCurrencyValue = 0;
+        try {
+            targetCurrencyValue = currencyRates.getDouble(targetCurrency);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return resultInUSD * targetCurrencyValue;
     }
 }

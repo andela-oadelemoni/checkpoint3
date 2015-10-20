@@ -1,9 +1,6 @@
 package com.andela.www.currencycalculator.helper;
 
-import android.util.Log;
-
 import com.andela.www.currencycalculator.utility.ArithmeticOperand;
-
 import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.regex.Pattern;
