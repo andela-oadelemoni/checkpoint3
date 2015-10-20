@@ -1,5 +1,6 @@
 package com.andela.www.currencycalculator.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -70,6 +71,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // conversion button
         Button conversionButton = (Button) findViewById(R.id.conversionButton);
         conversionButton.setOnClickListener(this);
+
+        // top ten button
+        Button topTenButton = (Button) findViewById(R.id.topTen);
+        topTenButton.setOnClickListener(this);
     }
 
     @Override
@@ -135,6 +140,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 activePosition = currency.getCurrencyName();
                 updateCurrencyResult();
                 break;
+            case R.id.topTen:
+                Intent intent = new Intent(this, TopTenActivity.class);
+                intent.putExtra("USD_VALUE", inputHandler.getUSDValue());
+                startActivity(intent);
         }
     }
 

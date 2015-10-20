@@ -136,6 +136,10 @@ public class Calculator {
         return calculationResult;
     }
 
+    public double getResultInUSD() {
+        return resultInUSD;
+    }
+
     public void setNewOperation() {
         isFirstOperation = true;
         history.resetHistory();
