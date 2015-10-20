@@ -164,6 +164,10 @@ public class InputHandler {
         return calculator.equivalentValue(targetCurrency);
     }
 
+    public double getUSDValue() {
+        return calculator.getResultInUSD();
+    }
+
     private ArithmeticOperand getOperand(int id) {
         switch (id) {
             case R.id.divide:
