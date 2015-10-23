@@ -20,20 +20,18 @@ import java.util.List;
  */
 public class CurrencyAdapter extends ArrayAdapter<String> {
 
-    private Activity activity;
+    private Context context;
     private List currencies;
-    private Resources res;
     private Currency tempValues;
     private LayoutInflater inflater;
 
     // Constructor
-    public CurrencyAdapter(Context context, int textViewResourceId, List objects, Resources resLocal) {
+    public CurrencyAdapter(Context context, int textViewResourceId, List objects) {
 
         super(context, textViewResourceId, objects);
-        activity = (Activity) context;
+        this.context = context;
         currencies = objects;
-        res = resLocal;
-        inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override

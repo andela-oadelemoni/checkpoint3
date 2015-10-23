@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         convertingCurrencySelector = (Spinner) findViewById(R.id.destination_currency_picker);
 
         // define adapters for spinners
-        CurrencyAdapter currencyAdapter = new CurrencyAdapter(this, R.layout.spinner_rows, currencyValues, getResources());
+        CurrencyAdapter currencyAdapter = new CurrencyAdapter(this, R.layout.spinner_rows, currencyValues);
 
         startingCurrency.setAdapter(currencyAdapter);
         convertingCurrencySelector.setAdapter(currencyAdapter);

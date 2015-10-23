@@ -31,6 +31,8 @@ public class Calculator {
     private double resultInUSD;
     private JSONObject currencyRates;
 
+    public Calculator() {}
+
     public Calculator(Context context) {
         converter = new CurrencyConverter(context);
         converter.getRates(new CurrencyConverter.RatesCallback() {
@@ -47,12 +49,12 @@ public class Calculator {
     }
 
     private void setFirstNumber(float firstNumber, String baseCurrency) {
-        firstNumberInUSD = convertToUSD(firstNumber, baseCurrency);
+        if (currencyRates!= null) firstNumberInUSD = convertToUSD(firstNumber, baseCurrency);
         this.firstNumber = firstNumber;
     }
 
     private void setSecondNumber(float secondNumber, String baseCurrency) {
-        secondNumberInUSD = convertToUSD(secondNumber, baseCurrency);
+        if (currencyRates!= null) secondNumberInUSD = convertToUSD(secondNumber, baseCurrency);
         this.secondNumber = secondNumber;
     }
 
@@ -123,8 +125,10 @@ public class Calculator {
         if (calculationStack.size() > 1) {
             secondNumber = calculationStack.pop();
             firstNumber = calculationStack.pop();
-            firstNumberInUSD = convertToUSD(firstNumber, baseCurrency);
-            secondNumberInUSD = convertToUSD(secondNumber, baseCurrency);
+            if (currencyRates!= null) {
+                firstNumberInUSD = convertToUSD(firstNumber, baseCurrency);
+                secondNumberInUSD = convertToUSD(secondNumber, baseCurrency);
+            }
         }
     }
 
@@ -156,7 +160,7 @@ public class Calculator {
         }
         else if (isFirstOperation) {
             calculationResult = initialInput;
-            resultInUSD = convertToUSD(initialInput, baseCurrency);
+            if (currencyRates!= null) resultInUSD = convertToUSD(initialInput, baseCurrency);
             String history = baseCurrency + " " + String.valueOf(calculationResult);
             this.history.pushHistory(history);
         }
