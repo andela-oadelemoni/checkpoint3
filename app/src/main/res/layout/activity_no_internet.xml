@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/internet_error_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/no_internet_message"/>
+
+    <Button
+        android:id="@+id/refresh_button"
+        android:layout_below="@+id/internet_error_message"
+        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/refresh_button"
+        android:drawableStart="@drawable/ic_autorenew"
+        android:drawableLeft="@drawable/ic_autorenew"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

@@ -15,6 +15,8 @@ import com.andela.www.currencycalculator.helper.InputHandler;
 import com.andela.www.currencycalculator.adapter.CurrencyAdapter;
 import com.andela.www.currencycalculator.model.Currency;
 import com.andela.www.currencycalculator.R;
+import com.andela.www.currencycalculator.utility.NetworkUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,8 +39,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Initialize method to set spinner values
-        init();
+        // Check for internet connection and Initialize method to set spinner values
+        checkForInternet();
+    }
+
+    private void checkForInternet() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // if there is internet connection fetch data from Parse
+                final boolean isConnected = NetworkUtil.isInternetConnected(getApplicationContext());
+
+                if (isConnected) {
+                    init();
+                }
+                else {
+                    Intent intent = new Intent(MainActivity.this, NoInternetActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+        thread.start();
     }
 
     private void init() {

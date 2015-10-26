@@ -81,7 +81,8 @@ public class InputHandler {
         if (backHistory.size() > 1) {
             // check removed string for decimal
             String inspectPop = backHistory.pop();
-            if (inspectPop.substring(inspectPop.length() - 1).equals(".")) setDotUnpressed();
+            if (inspectPop.substring(inspectPop.length() - 1).equals("."))
+                setDotUnpressed();
 
             currentInput = backHistory.pop();
             initialInput = Float.valueOf(currentInput);
@@ -146,8 +147,10 @@ public class InputHandler {
         // convert calculationResult to string
         String display = String.valueOf(calculationResult);
         // check if initialInput is integer
-        if (calculationResult % 1 == 0) return display.split(Pattern.quote("."))[0];
-        else return display;
+        if (calculationResult % 1 == 0) {
+            return display.split(Pattern.quote("."))[0];
+        }
+        return display;
     }
 
     private void setMiniDisplay() {

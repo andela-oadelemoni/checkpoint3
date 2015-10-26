@@ -1,18 +1,14 @@
 package com.andela.www.currencycalculator.activities;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
 import android.widget.ListView;
 
 import com.andela.www.currencycalculator.R;
 import com.andela.www.currencycalculator.adapter.TopTenAdapter;
 import com.andela.www.currencycalculator.helper.CurrencyConverter;
-import com.andela.www.currencycalculator.utility.Calculator;
+import com.andela.www.currencycalculator.helper.CurrencyRate;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,7 +36,7 @@ public class TopTenActivity extends AppCompatActivity {
         CurrencyConverter converter = new CurrencyConverter(this);
         converter.getRates(new CurrencyConverter.RatesCallback() {
             @Override
-            public void onSuccess(JSONObject rates) {
+            public void onSuccess(CurrencyRate rates) {
                 try {
                     fillListView(rates);
                 } catch (JSONException e) {
@@ -56,15 +52,15 @@ public class TopTenActivity extends AppCompatActivity {
 
     }
 
-    private void fillListView(JSONObject rates) throws JSONException {
-        List<JSONObject> orderingList = new ArrayList<>();
+    private void fillListView(CurrencyRate rates) throws JSONException {
+        List<CurrencyRate> orderingList = new ArrayList<>();
 
         Iterator<?> keys = rates.keys();
 
         while (keys.hasNext()) {
             String key = (String)keys.next();
             double value = rates.getDouble(key) * usdValue;
-            JSONObject object = new JSONObject();
+            CurrencyRate object = new CurrencyRate(rates);
             object.put(key, value);
 
             orderingList.add(object);
@@ -75,9 +71,9 @@ public class TopTenActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
     }
 
-    private List<JSONObject> getTopTen(List<JSONObject> list) {
+    private List<CurrencyRate> getTopTen(List<CurrencyRate> list) {
 
-        List<JSONObject> topTen = new ArrayList<>();
+        List<CurrencyRate> topTen = new ArrayList<>();
 
         Collections.sort(list, new Comparator<JSONObject>() {
             @Override

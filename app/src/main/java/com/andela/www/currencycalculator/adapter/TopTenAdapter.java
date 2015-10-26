@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.andela.www.currencycalculator.R;
+import com.andela.www.currencycalculator.helper.CurrencyRate;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.List;
@@ -15,8 +17,8 @@ import java.util.List;
  * Created by kamiye on 10/20/15.
  */
 
-public class TopTenAdapter extends ArrayAdapter<JSONObject> {
-    public TopTenAdapter(Context context, List<JSONObject> currency) {
+public class TopTenAdapter extends ArrayAdapter<CurrencyRate> {
+    public TopTenAdapter(Context context, List<CurrencyRate> currency) {
         super(context, 0, currency);
     }
 

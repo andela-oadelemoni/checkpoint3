@@ -64,4 +64,7 @@
         <item>@string/nigerian_dollar</item>
     </string-array>
     <string name="title_activity_top_ten">Top Ten</string>
+    <string name="internet_test_url">"google.com"</string>
+    <string name="no_internet_message">Oops!!! No internet Connection. Connect and try again</string>
+    <string name="refresh_button">Refresh</string>
 </resources>

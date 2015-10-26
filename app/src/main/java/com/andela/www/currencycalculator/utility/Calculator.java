@@ -2,10 +2,13 @@ package com.andela.www.currencycalculator.utility;
 
 import android.content.Context;
 import android.util.Log;
+
 import com.andela.www.currencycalculator.helper.CalculationHistory;
 import com.andela.www.currencycalculator.helper.CurrencyConverter;
+import com.andela.www.currencycalculator.helper.CurrencyRate;
+
 import org.json.JSONException;
-import org.json.JSONObject;
+
 import java.util.Stack;
 
 /**
@@ -29,7 +32,7 @@ public class Calculator {
 
     private CurrencyConverter converter;
     private double resultInUSD;
-    private JSONObject currencyRates;
+    private CurrencyRate currencyRates;
 
     public Calculator() {}
 
@@ -37,7 +40,7 @@ public class Calculator {
         converter = new CurrencyConverter(context);
         converter.getRates(new CurrencyConverter.RatesCallback() {
             @Override
-            public void onSuccess(JSONObject rates) {
+            public void onSuccess(CurrencyRate rates) {
                 currencyRates = rates;
             }
 
