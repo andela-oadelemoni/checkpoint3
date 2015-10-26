@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Check for internet connection and Initialize method to set spinner values
         checkForInternet();
+        init();
     }
 
     private void checkForInternet() {
@@ -50,10 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // if there is internet connection fetch data from Parse
                 final boolean isConnected = NetworkUtil.isInternetConnected(getApplicationContext());
 
-                if (isConnected) {
-                    init();
-                }
-                else {
+                if (!isConnected) {
                     Intent intent = new Intent(MainActivity.this, NoInternetActivity.class);
                     startActivity(intent);
                 }
