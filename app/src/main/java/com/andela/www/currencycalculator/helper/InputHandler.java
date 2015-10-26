@@ -133,8 +133,12 @@ public class InputHandler {
     }
 
     private void setDisplay() {
-        if (currentInput.equals("") || currentInput.equals("0")) screen.setText("0");
-        else screen.setText(currentInput);
+        if (currentInput.equals("") || currentInput.equals("0")) {
+            screen.setText("0");
+        }
+        else {
+            screen.setText(currentInput);
+        }
     }
 
     private void setMainDisplay() {
